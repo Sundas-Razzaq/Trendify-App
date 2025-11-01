@@ -13,6 +13,38 @@ class TTexts {
   static const String onboardingSubTitle3 =
       "From Our Store to Your Doorstep - Experience Convenient Delivery Today!";
 
-  static const String homeAppbarTitle = "Good day for shopping";
-  static const String homeAppbarSubTitle = "Sundas Razzaq";
+  // Signup
+  static const String signupTitle = "Create Account";
+  static const String signupSubtitle = "Sign up to get started with Trendify!";
+  static const String signupNameLabel = "Name";
+  static const String signupEmailLabel = "Email";
+  static const String signupPasswordLabel = "Password";
+  static const String signupConfirmPasswordLabel = "Confirm Password";
+  static const String signupButton = "Sign Up";
+  static const String signupAlreadyHaveAccount = "Already have an account?";
+  static const String signupLoginLink = "Login";
+
+  // Login
+  static const String loginTitle = "Welcome Back";
+  static const String loginSubtitle = "Login to your account";
+  static const String loginEmailLabel = "Email";
+  static const String loginPasswordLabel = "Password";
+  static const String loginButton = "Login";
+  static const String loginForgotPassword = "Forgot Password?";
+  static const String loginNoAccount = "Don't have an account?";
+  static const String loginSignupLink = "Sign Up";
+
+  // Email Verification
+  static const String emailVerificationTitle = "Verify Your Email";
+  static const String emailVerificationSubtitle =
+      "A verification link has been sent to your email.";
+  static const String emailVerificationResend = "Resend Email";
+  static const String emailVerificationContinue = "Continue";
+
+  // Reset Password
+  static const String resetPasswordTitle = "Reset Password";
+  static const String resetPasswordSubtitle =
+      "Enter your email to reset your password.";
+  static const String resetPasswordEmailLabel = "Email";
+  static const String resetPasswordButton = "Send Reset Link";
 }

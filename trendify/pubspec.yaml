@@ -23,8 +23,9 @@ dependencies:
   cupertino_icons: ^1.0.8
 
   # state management
-  get: 4.6.5
+  get: ^4.7.2
   get_storage: ^2.1.1
+  smooth_page_indicator: ^1.0.0
 
 dev_dependencies:
   flutter_test:
@@ -84,12 +85,12 @@ flutter:
 flutter_native_splash:
   color: "#ffffff"
   color_dark: "#272727"
-  image: assets/images/splash_logo.jpg
+  image: assets/images/splash_logo.png
   android: true
   ios: true
   web: true
   android_12:
     color: "#ffffff"
     color_dark: "#272727"
-    image: assets/images/splash_logo.jpg
+    image: assets/images/splash_logo.png
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trendify/utils/theme/custom_themes/buttom_sheet_theme.dart';
+import 'package:trendify/utils/constants/colors.dart';
 import 'package:trendify/utils/theme/custom_themes/text_theme.dart';
 import 'custom_themes/elevated_button_theme.dart';
 import 'custom_themes/appbar_theme.dart';
@@ -15,8 +16,8 @@ class TAppTheme {
     useMaterial3: true,
     fontFamily: 'poppins',
     brightness: Brightness.light,
-    primaryColor: Colors.blue,
-    scaffoldBackgroundColor: Colors.white,
+    primaryColor: TColors.primary,
+    scaffoldBackgroundColor: TColors.primaryBackground,
     textTheme: TTextTheme.lightTextTheme,
     elevatedButtonTheme: TElevatedButtonTheme.lightElevatedButtonTheme,
     chipTheme: TChipTheme.lightChipTheme,
@@ -30,8 +31,8 @@ class TAppTheme {
     useMaterial3: true,
     fontFamily: 'poppins',
     brightness: Brightness.dark,
-    primaryColor: Colors.blue,
-    scaffoldBackgroundColor: Colors.black,
+    primaryColor: TColors.primary,
+    scaffoldBackgroundColor: TColors.dark,
     textTheme: TTextTheme.darkTextTheme,
     elevatedButtonTheme: TElevatedButtonTheme.darkElevatedButtonTheme,
     chipTheme: TChipTheme.darkChipTheme,

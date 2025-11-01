@@ -4,9 +4,9 @@ class TColors {
   TColors._();
 
   //App Basic Colors
-  static const Color primary = Color(0xFF4468FF);
-  static const Color secondary = Color(0xFFFFE248);
-  static const Color accent = Color(0xFFb0c7ff);
+  static const Color primary = Color(0xFFE94B4B); // Red
+  static const Color secondary = Color(0xFF23395D); // Navy Blue
+  static const Color accent = Color(0xFF7EC8E3); // Light Blue
 
   //gradient Colors
   static const Gradient linearGradient = LinearGradient(
@@ -16,22 +16,22 @@ class TColors {
   );
 
   //Text Colors
-  static const Color textprimary = Color(0xFF333333);
-  static const Color textsecondary = Color(0xFF6C7570);
+  static const Color textprimary = Color(0xFF23395D); // Navy Blue
+  static const Color textsecondary = Color(0xFF7EC8E3); // Light Blue
   static const Color textWhite = Colors.white;
 
   //Background Colors
-  static const Color light = Color(0xFFF6F6F6);
-  static const Color dark = Color(0xFF272727);
-  static const Color primaryBackground = Color(0xFFF3F5FF);
+  static const Color light = Color(0xFFF6F8FA); // Soft Gray
+  static const Color dark = Color(0xFF23395D); // Navy Blue
+  static const Color primaryBackground = Color(0xFFFFFFFF); // White
 
   //Background Container Colors
   static const Color lightContainer = Color(0xFFF6F6F6);
   static const Color darkContainer = Colors.white;
 
   //Button Colors
-  static const Color buttonPrimary = Color(0xFF4b68ff);
-  static const Color buttonSecondary = Color(0xFF6C7570);
+  static const Color buttonPrimary = Color(0xFFE94B4B); // Red
+  static const Color buttonSecondary = Color(0xFF23395D); // Navy Blue
   static const Color buttonDisabled = Color(0xFFC4C4C4);
 
   //Border Colors
@@ -41,7 +41,7 @@ class TColors {
   //error and validation Colors
   static const Color error = Color(0xFFD32F2F);
   static const Color success = Color(0xFF388E3C);
-  static const Color warning = Color(0xFFF57C00);
+  static const Color warning = Color(0xFFF4C784); // Beige
   static const Color info = Color(0xFF1976D2);
 
   //neutral Colors
