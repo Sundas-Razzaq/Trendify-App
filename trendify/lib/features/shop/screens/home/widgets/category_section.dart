@@ -117,8 +117,6 @@ class CategorySection extends StatelessWidget {
                           fit: BoxFit.cover,
                           // Show a visible fallback and log if the asset fails to load.
                           errorBuilder: (context, error, stackTrace) {
-                            // Print to console to help debugging missing assets.
-                            // In release builds this will still render the Icon.
                             // ignore: avoid_print
                             print(
                               'Failed to load asset: ${cat['image']} -> $error',
