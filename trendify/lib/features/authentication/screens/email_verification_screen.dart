@@ -3,18 +3,18 @@ import 'package:trendify/utils/validators/validation.dart';
 import 'package:trendify/utils/constants/texts_strings.dart';
 
 class EmailVerificationScreen extends StatelessWidget {
-  const EmailVerificationScreen({Key? key}) : super(key: key);
+  const EmailVerificationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     final otpController = TextEditingController();
     return Scaffold(
       appBar: AppBar(title: const Text(TTexts.emailVerificationTitle)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
-          key: _formKey,
+          key: formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -28,7 +28,7 @@ class EmailVerificationScreen extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {
+                    if (formKey.currentState!.validate()) {
                       Navigator.pushReplacementNamed(context, '/login');
                     }
                   },

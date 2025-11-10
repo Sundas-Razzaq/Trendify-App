@@ -3,11 +3,11 @@ import 'package:trendify/utils/validators/validation.dart';
 import 'package:trendify/utils/constants/texts_strings.dart';
 
 class ResetPasswordScreen extends StatelessWidget {
-  const ResetPasswordScreen({Key? key}) : super(key: key);
+  const ResetPasswordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     final passwordController = TextEditingController();
     final confirmPasswordController = TextEditingController();
     return Scaffold(
@@ -15,7 +15,7 @@ class ResetPasswordScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
-          key: _formKey,
+          key: formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -46,7 +46,7 @@ class ResetPasswordScreen extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {
+                    if (formKey.currentState!.validate()) {
                       // Only UI navigation: After password reset, go to login page
                       Navigator.pushReplacementNamed(context, '/login');
                     }

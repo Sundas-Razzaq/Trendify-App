@@ -78,7 +78,7 @@ class SignupScreen extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/home');
+                    Navigator.pushReplacementNamed(context, '/main');
                   },
                   child: Text(TTexts.signupButton),
                 ),

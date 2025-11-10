@@ -4,11 +4,11 @@ import 'package:trendify/utils/validators/validation.dart';
 import 'package:trendify/utils/constants/texts_strings.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     final emailController = TextEditingController();
     final passwordController = TextEditingController();
     return Scaffold(
@@ -16,7 +16,7 @@ class LoginScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
-          key: _formKey,
+          key: formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -41,8 +41,8 @@ class LoginScreen extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      Navigator.pushReplacementNamed(context, '/home');
+                    if (formKey.currentState!.validate()) {
+                      Navigator.pushReplacementNamed(context, '/main');
                     }
                   },
                   child: const Text(TTexts.loginButton),
