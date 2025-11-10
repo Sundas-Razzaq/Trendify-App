@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:trendify/utils/constants/sizes.dart';
 import 'package:trendify/utils/constants/colors.dart';
 import 'package:trendify/utils/constants/image_strings.dart';
+import 'package:trendify/features/shop/screens/home/widgets/category_screen.dart';
 
 class CategorySection extends StatelessWidget {
   const CategorySection({super.key});
@@ -95,63 +96,76 @@ class CategorySection extends StatelessWidget {
                 const SizedBox(width: TSizes.spaceBtwItems),
             itemBuilder: (context, index) {
               final cat = categories[index];
-              return SizedBox(
-                width: 72,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 56,
-                      height: 56,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: TColors.softGrey,
-                        border: Border.all(
-                          color: TColors.borderPrimary,
-                          width: 1,
-                        ),
-                      ),
-                      child: ClipOval(
-                        child: Image.asset(
-                          cat['image'] as String,
-                          fit: BoxFit.cover,
-                          // Show a visible fallback and log if the asset fails to load.
-                          errorBuilder: (context, error, stackTrace) {
-                            // ignore: avoid_print
-                            print(
-                              'Failed to load asset: ${cat['image']} -> $error',
-                            );
-                            return Container(
-                              color: TColors.softGrey,
-                              child: const Center(
-                                child: Icon(
-                                  Icons.broken_image,
-                                  color: Colors.white70,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
+              return InkWell(
+                borderRadius: BorderRadius.circular(TSizes.borderRadiusSm),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          CategoryScreen(categoryName: cat['label'] as String),
                     ),
-                    const SizedBox(height: 4),
-                    Flexible(
-                      child: SizedBox(
-                        width: 64,
-                        child: Text(
-                          cat['label'] as String,
-                          style: const TextStyle(
-                            fontSize: TSizes.fontSizeSm,
-                            fontWeight: FontWeight.w500,
-                            color: TColors.textprimary,
+                  );
+                },
+                child: SizedBox(
+                  width: 72,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 56,
+                        height: 56,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: TColors.softGrey,
+                          border: Border.all(
+                            color: TColors.borderPrimary,
+                            width: 1,
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.center,
+                        ),
+                        child: ClipOval(
+                          child: Image.asset(
+                            cat['image'] as String,
+                            fit: BoxFit.cover,
+                            // Show a visible fallback and log if the asset fails to load.
+                            errorBuilder: (context, error, stackTrace) {
+                              // Print to console to help debugging missing assets.
+                              // ignore: avoid_print
+                              print(
+                                'Failed to load asset: ${cat['image']} -> $error',
+                              );
+                              return Container(
+                                color: TColors.softGrey,
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.broken_image,
+                                    color: Colors.white70,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 4), // Reduced to avoid overflow
+                      Flexible(
+                        child: SizedBox(
+                          width: 64,
+                          child: Text(
+                            cat['label'] as String,
+                            style: const TextStyle(
+                              fontSize: TSizes.fontSizeSm,
+                              fontWeight: FontWeight.w500,
+                              color: TColors.textprimary,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               );
             },

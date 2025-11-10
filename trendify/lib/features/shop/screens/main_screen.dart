@@ -9,14 +9,16 @@ import 'package:trendify/features/shop/screens/home/widgets/home_appbar.dart';
 import 'package:trendify/features/shop/screens/home/widgets/home_drawer.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  final int initialIndex;
+
+  const MainScreen({super.key, this.initialIndex = 0});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
 
   final List<Widget> _screens = const [
     HomeScreen(),
@@ -26,8 +28,15 @@ class _MainScreenState extends State<MainScreen> {
     SettingsScreen(),
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.initialIndex;
+  }
+
   void _onTabTapped(int index) {
     if (_selectedIndex == index) return;
+
     setState(() {
       _selectedIndex = index;
     });
@@ -48,7 +57,9 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ),
       ),
+
       body: IndexedStack(index: _selectedIndex, children: _screens),
+
       bottomNavigationBar: TrendyBottomNav(
         selectedIndex: _selectedIndex,
         onTabTapped: _onTabTapped,
