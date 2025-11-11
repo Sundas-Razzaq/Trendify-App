@@ -50,4 +50,6 @@ class TImages {
       'assets/images/product_images/women_banner.png';
   static const String categoryImage6 =
       'assets/images/product_images/men_banner.png';
+  // decide screen image
+  static const String decide = 'assets/images/decide.png';
 }

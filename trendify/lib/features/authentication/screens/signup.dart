@@ -3,6 +3,7 @@ import 'package:trendify/utils/constants/colors.dart';
 import 'package:trendify/utils/constants/sizes.dart';
 import 'package:trendify/utils/constants/texts_strings.dart';
 import 'package:trendify/utils/validators/validation.dart';
+import 'package:trendify/routes/app_routes.dart';
 
 class SignupScreen extends StatelessWidget {
   const SignupScreen({super.key});
@@ -78,7 +79,7 @@ class SignupScreen extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/main');
+                    Navigator.pushReplacementNamed(context, AppRoutes.decide);
                   },
                   child: Text(TTexts.signupButton),
                 ),

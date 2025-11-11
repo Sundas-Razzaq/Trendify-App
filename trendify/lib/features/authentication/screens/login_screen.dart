@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
 import 'package:trendify/utils/validators/validation.dart';
 import 'package:trendify/utils/constants/texts_strings.dart';
+import 'package:trendify/routes/app_routes.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -42,7 +43,9 @@ class LoginScreen extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
-                      Navigator.pushReplacementNamed(context, '/main');
+                      // After login, navigate to the decide screen so the
+                      // user can choose Customer vs Seller flows.
+                      Navigator.pushReplacementNamed(context, AppRoutes.decide);
                     }
                   },
                   child: const Text(TTexts.loginButton),

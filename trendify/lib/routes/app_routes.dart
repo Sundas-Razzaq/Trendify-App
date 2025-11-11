@@ -7,6 +7,8 @@ import 'package:trendify/features/authentication/screens/otp_verification_screen
 import 'package:trendify/features/authentication/screens/forgot_password_screen.dart';
 import 'package:trendify/features/authentication/screens/logout_screen.dart';
 import 'package:trendify/features/shop/screens/main_screen.dart';
+import 'package:trendify/features/seller/screens/seller_dashboard.dart';
+import 'package:trendify/features/shop/screens/home/widgets/decide.dart';
 import 'package:trendify/features/profile/screens/profile_screen.dart';
 // Individual tab screens are shown via `MainScreen` with an initial index.
 
@@ -20,6 +22,8 @@ class AppRoutes {
   static const String logout = '/logout';
   static const String home = '/home';
   static const String main = '/main';
+  static const String decide = '/decide';
+  static const String sellerDashboard = '/seller-dashboard';
   static const String profile = '/profile';
   static const String wishlist = '/wishlist';
   static const String cart = '/cart';
@@ -37,6 +41,10 @@ class AppRoutes {
     GetPage(name: otpVerification, page: () => const OTPVerificationScreen()),
     GetPage(name: forgotPassword, page: () => const ForgotPasswordScreen()),
     GetPage(name: logout, page: () => const LogoutScreen()),
+    // Decide screen shown after signup/login to choose customer or seller
+    GetPage(name: decide, page: () => const DecideScreen()),
+    // Seller dashboard route
+    GetPage(name: sellerDashboard, page: () => const SellerDashboard()),
     // Navigate to the MainScreen with the appropriate tab selected when
     // these top-level routes are used (e.g., from the drawer).
     GetPage(name: home, page: () => const MainScreen(initialIndex: 0)),

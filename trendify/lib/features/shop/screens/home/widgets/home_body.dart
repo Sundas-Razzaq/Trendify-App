@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:trendify/utils/constants/sizes.dart';
 import 'package:trendify/utils/constants/colors.dart';
@@ -50,7 +49,6 @@ class _HomeBodyState extends State<HomeBody> {
   }
 
   Widget _buildCarousel(BuildContext context) {
-    // Use AspectRatio for the carousel so it scales across devices instead of a fixed height.
     return Column(
       children: [
         AspectRatio(
@@ -101,52 +99,54 @@ class _HomeBodyState extends State<HomeBody> {
 
   Widget _productRow(String title, String category, {bool accented = false}) {
     final products = ProductData.getProductsByCategory(category);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: TSizes.md),
-          child: Row(
-            children: [
-              if (accented)
-                Container(
-                  width: 8,
-                  height: 28,
-                  margin: const EdgeInsets.only(right: TSizes.sm),
-                  decoration: BoxDecoration(
-                    color: TColors.primary,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ),
-              Expanded(
-                child: Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-              TextButton(onPressed: () {}, child: const Text('View All')),
-            ],
-          ),
-        ),
-        const SizedBox(height: TSizes.sm),
-        // Make horizontal product row responsive: compute item width based on available space
-        LayoutBuilder(
-          builder: (context, constraints) {
-            final maxWidth = constraints.maxWidth;
-            // item width: try 200, but allow it to scale on narrow screens
-            final itemWidth = maxWidth * 0.45 < 200 ? maxWidth * 0.45 : 200.0;
-            final rowHeight =
-                itemWidth * 1.6; // matches ProductCard visual proportion
 
-            return SizedBox(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final maxWidth = constraints.maxWidth;
+        final itemWidth = maxWidth * 0.45 < 200 ? maxWidth * 0.45 : 200.0;
+        final rowHeight = itemWidth * 1.6;
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: TSizes.md),
+              child: Row(
+                children: [
+                  if (accented)
+                    Container(
+                      width: 8,
+                      height: 28,
+                      margin: const EdgeInsets.only(right: TSizes.sm),
+                      decoration: BoxDecoration(
+                        color: TColors.primary,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  TextButton(onPressed: () {}, child: const Text('View All')),
+                ],
+              ),
+            ),
+            const SizedBox(height: TSizes.sm),
+
+            /// ⭐ Responsive Horizontal Product List — No overflow now
+            SizedBox(
               height: rowHeight,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: TSizes.md),
+                itemCount: products.length,
                 itemBuilder: (context, index) {
-                  final p = products[index % products.length];
+                  final p = products[index];
+
                   return SizedBox(
                     width: itemWidth,
                     child: ProductCard(
@@ -170,50 +170,32 @@ class _HomeBodyState extends State<HomeBody> {
                   );
                 },
                 separatorBuilder: (_, __) => const SizedBox(width: TSizes.sm),
-                itemCount: products.isEmpty ? 0 : products.length,
               ),
-            );
-          },
-        ),
-      ],
+            ),
+          ],
+        );
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        const SizedBox(height: TSizes.sm),
-        _buildCarousel(context),
-        const SizedBox(height: TSizes.md),
-        // Trending Now
-        // Use relative heights so the row adapts to small / large screens.
-        LayoutBuilder(
-          builder: (context, constraints) {
-            // Calculate a responsive row height: max 320, but not more than 45% of screen height
-            final screenH = MediaQuery.of(context).size.height;
-            final rowHeight = screenH * 0.45 > 320 ? 320.0 : screenH * 0.45;
-            return ConstrainedBox(
-              constraints: BoxConstraints(maxHeight: rowHeight),
-              child: _productRow('Trending Now', 'Beauty', accented: false),
-            );
-          },
-        ),
-        const SizedBox(height: TSizes.md),
-        // Best Sellers with accent bar
-        LayoutBuilder(
-          builder: (context, constraints) {
-            final screenH = MediaQuery.of(context).size.height;
-            final rowHeight = screenH * 0.45 > 320 ? 320.0 : screenH * 0.45;
-            return ConstrainedBox(
-              constraints: BoxConstraints(maxHeight: rowHeight),
-              child: _productRow('Best Sellers', 'Fashion', accented: true),
-            );
-          },
-        ),
-        const SizedBox(height: TSizes.md),
-      ],
+    return SingleChildScrollView(
+      physics: const ClampingScrollPhysics(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const SizedBox(height: TSizes.sm),
+          _buildCarousel(context),
+          const SizedBox(height: TSizes.md),
+
+          _productRow("Trending Now", "Beauty", accented: false),
+          const SizedBox(height: TSizes.md),
+
+          _productRow("Best Sellers", "Fashion", accented: true),
+          const SizedBox(height: TSizes.md),
+        ],
+      ),
     );
   }
 }
