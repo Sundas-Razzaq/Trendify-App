@@ -14,8 +14,8 @@ class CategorySection extends StatelessWidget {
       {'label': 'Fashion', 'image': TImages.categoryImage2},
       {'label': 'Kids', 'image': TImages.categoryImage3},
       {'label': 'Home', 'image': TImages.categoryImage4},
-      {'label': 'Mens', 'image': TImages.categoryImage5},
-      {'label': 'Womens', 'image': TImages.categoryImage6},
+      {'label': 'Women', 'image': TImages.categoryImage5},
+      {'label': 'Mens', 'image': TImages.categoryImage6},
     ];
 
     return Column(

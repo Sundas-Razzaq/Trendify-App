@@ -1,7 +1,9 @@
+import 'package:trendify/utils/constants/image_strings.dart';
+
 const Map<String, List<Map<String, dynamic>>> categoryProducts = {
   "Beauty": [
     {
-      "image": "assets/images/beauty1.png",
+      "image": TImages.productImage1,
       "title": "Rose Face Serum",
       "subtitle": "Glow Skin Care",
       "price": 12.99,
@@ -10,7 +12,7 @@ const Map<String, List<Map<String, dynamic>>> categoryProducts = {
       "reviews": 34,
     },
     {
-      "image": "assets/images/beauty2.png",
+      "image": TImages.productImage7,
       "title": "Matte Lipstick",
       "subtitle": "Long Lasting",
       "price": 8.49,
@@ -22,7 +24,7 @@ const Map<String, List<Map<String, dynamic>>> categoryProducts = {
 
   "Fashion": [
     {
-      "image": "assets/images/fashion1.png",
+      "image": TImages.productImage2,
       "title": "Trendy Handbag",
       "subtitle": "Leather Collection",
       "price": 45.00,
@@ -31,7 +33,7 @@ const Map<String, List<Map<String, dynamic>>> categoryProducts = {
       "reviews": 27,
     },
     {
-      "image": "assets/images/fashion2.png",
+      "image": TImages.productImage8,
       "title": "Stylish Sunglasses",
       "subtitle": "UV Protected",
       "price": 15.99,
@@ -43,7 +45,7 @@ const Map<String, List<Map<String, dynamic>>> categoryProducts = {
 
   "Kids": [
     {
-      "image": "assets/images/kids1.png",
+      "image": TImages.productImage3,
       "title": "Kids Backpack",
       "subtitle": "School Bag",
       "price": 22.50,
@@ -52,7 +54,7 @@ const Map<String, List<Map<String, dynamic>>> categoryProducts = {
       "reviews": 12,
     },
     {
-      "image": "assets/images/kids2.png",
+      "image": TImages.productImage9,
       "title": "Toy Car Set",
       "subtitle": "Pack of 5",
       "price": 14.99,
@@ -64,7 +66,7 @@ const Map<String, List<Map<String, dynamic>>> categoryProducts = {
 
   "Home": [
     {
-      "image": "assets/images/home1.png",
+      "image": TImages.productImage4,
       "title": "Wall Decor Frame",
       "subtitle": "Modern Design",
       "price": 19.99,
@@ -73,7 +75,7 @@ const Map<String, List<Map<String, dynamic>>> categoryProducts = {
       "reviews": 14,
     },
     {
-      "image": "assets/images/home2.png",
+      "image": TImages.productImage10,
       "title": "LED Desk Lamp",
       "subtitle": "Touch Control",
       "price": 28.99,
@@ -85,7 +87,7 @@ const Map<String, List<Map<String, dynamic>>> categoryProducts = {
 
   "Mens": [
     {
-      "image": "assets/images/mens1.png",
+      "image": TImages.productImage6,
       "title": "Men's T-Shirt",
       "subtitle": "Cotton Fit",
       "price": 16.99,
@@ -94,7 +96,7 @@ const Map<String, List<Map<String, dynamic>>> categoryProducts = {
       "reviews": 51,
     },
     {
-      "image": "assets/images/mens2.png",
+      "image": TImages.productImage12,
       "title": "Sports Sneakers",
       "subtitle": "Running Shoes",
       "price": 59.99,
@@ -106,7 +108,7 @@ const Map<String, List<Map<String, dynamic>>> categoryProducts = {
 
   "Womens": [
     {
-      "image": "assets/images/women1.png",
+      "image": TImages.productImage5,
       "title": "Summer Dress",
       "subtitle": "Floral Design",
       "price": 34.99,
@@ -115,7 +117,7 @@ const Map<String, List<Map<String, dynamic>>> categoryProducts = {
       "reviews": 102,
     },
     {
-      "image": "assets/images/women2.png",
+      "image": TImages.productImage11,
       "title": "Shoulder Bag",
       "subtitle": "Casual Style",
       "price": 27.49,

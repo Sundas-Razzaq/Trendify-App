@@ -19,17 +19,35 @@ class TImages {
   static const String onboardingImage3 =
       'assets/images/on_boarding_images/line_dilivery.png';
 
-  //category images
+  //product images
+  static const String productImage1 =
+      'assets/images/product_images/beauty1.jpg';
+  static const String productImage2 =
+      'assets/images/product_images/fashion1.jpeg';
+  static const String productImage3 = 'assets/images/product_images/kids1.jpg';
+  static const String productImage4 = 'assets/images/product_images/home1.png';
+  static const String productImage5 = 'assets/images/product_images/women1.png';
+  static const String productImage6 = 'assets/images/product_images/men1.png';
+  static const String productImage7 =
+      'assets/images/product_images/beauty2.jpg';
+  static const String productImage8 =
+      'assets/images/product_images/fashion2.jpeg';
+  static const String productImage9 = 'assets/images/product_images/kids2.jpg';
+  static const String productImage10 =
+      'assets/images/product_images/home2.jpeg';
+  static const String productImage11 =
+      'assets/images/product_images/women2.png';
+  static const String productImage12 = 'assets/images/product_images/men2.png';
+
   static const String categoryImage1 =
-      'assets/images/category_images/category_a.png';
+      'assets/images/product_images/beauty1.jpg';
   static const String categoryImage2 =
-      'assets/images/category_images/category_b.png';
-  static const String categoryImage3 =
-      'assets/images/category_images/category_c.png';
+      'assets/images/product_images/fashion1.jpeg';
+  static const String categoryImage3 = 'assets/images/product_images/kids1.jpg';
   static const String categoryImage4 =
-      'assets/images/category_images/category_d.png';
+      'assets/images/product_images/home_banner.jpg';
   static const String categoryImage5 =
-      'assets/images/category_images/category_e.png';
+      'assets/images/product_images/women_banner.png';
   static const String categoryImage6 =
-      'assets/images/category_images/category_f.png';
+      'assets/images/product_images/men_banner.png';
 }

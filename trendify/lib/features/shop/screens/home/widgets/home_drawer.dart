@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:trendify/utils/constants/colors.dart';
 import 'package:trendify/utils/constants/sizes.dart';
 import 'package:trendify/utils/constants/image_strings.dart';
+import 'package:trendify/routes/app_routes.dart';
 
 class HomeDrawer extends StatelessWidget {
   const HomeDrawer({super.key});
@@ -51,14 +52,23 @@ class HomeDrawer extends StatelessWidget {
             const SizedBox(height: TSizes.spaceBtwSections),
             const Divider(),
             // Navigation List Tiles
-            _drawerTile(context, Icons.home, 'Home'),
-            _drawerTile(context, Icons.category, 'Categories'),
-            _drawerTile(context, Icons.favorite, 'Wishlist'),
-            _drawerTile(context, Icons.shopping_bag, 'Orders'),
-            _drawerTile(context, Icons.settings, 'Settings'),
+            _drawerTile(context, Icons.home, 'Home', AppRoutes.home),
+            _drawerTile(
+              context,
+              Icons.favorite,
+              'Wishlist',
+              AppRoutes.wishlist,
+            ),
+            _drawerTile(context, Icons.shopping_bag, 'Orders', AppRoutes.cart),
+            _drawerTile(
+              context,
+              Icons.settings,
+              'Settings',
+              AppRoutes.settings,
+            ),
             _drawerTile(context, Icons.help_outline, 'Help & Support'),
             const SizedBox(height: TSizes.spaceBtwSections),
-            _drawerTile(context, Icons.logout, 'Logout'),
+            _drawerTile(context, Icons.logout, 'Logout', AppRoutes.logout),
             const SizedBox(height: TSizes.spaceBtwSections),
           ],
         ),
@@ -66,7 +76,12 @@ class HomeDrawer extends StatelessWidget {
     );
   }
 
-  Widget _drawerTile(BuildContext context, IconData icon, String label) {
+  Widget _drawerTile(
+    BuildContext context,
+    IconData icon,
+    String label, [
+    String? routeName,
+  ]) {
     return ListTile(
       leading: Icon(icon, color: TColors.primary),
       title: Text(
@@ -76,7 +91,12 @@ class HomeDrawer extends StatelessWidget {
           fontWeight: FontWeight.w500,
         ),
       ),
-      onTap: () {},
+      onTap: () {
+        Navigator.pop(context); // close drawer first
+        if (routeName != null && routeName.isNotEmpty) {
+          Navigator.pushNamed(context, routeName);
+        }
+      },
     );
   }
 }

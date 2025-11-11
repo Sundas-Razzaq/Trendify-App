@@ -5,13 +5,10 @@ import 'package:trendify/features/authentication/screens/email_verification_scre
 import 'package:trendify/features/authentication/screens/reset_password_screen.dart';
 import 'package:trendify/features/authentication/screens/otp_verification_screen.dart';
 import 'package:trendify/features/authentication/screens/forgot_password_screen.dart';
-import 'package:trendify/features/shop/screens/home/home_screen.dart';
+import 'package:trendify/features/authentication/screens/logout_screen.dart';
 import 'package:trendify/features/shop/screens/main_screen.dart';
 import 'package:trendify/features/profile/screens/profile_screen.dart';
-import 'package:trendify/features/shop/screens/wishlist/wishlist_screen.dart';
-import 'package:trendify/features/shop/screens/cart/cart_screen.dart';
-import 'package:trendify/features/shop/screens/search/search_screen.dart';
-import 'package:trendify/features/shop/screens/settings/settings_screen.dart';
+// Individual tab screens are shown via `MainScreen` with an initial index.
 
 class AppRoutes {
   static const String signup = '/signup';
@@ -20,10 +17,10 @@ class AppRoutes {
   static const String resetPassword = '/reset-password';
   static const String otpVerification = '/otp-verification';
   static const String forgotPassword = '/forgot-password';
+  static const String logout = '/logout';
   static const String home = '/home';
   static const String main = '/main';
   static const String profile = '/profile';
-
   static const String wishlist = '/wishlist';
   static const String cart = '/cart';
   static const String search = '/search';
@@ -39,12 +36,15 @@ class AppRoutes {
     GetPage(name: resetPassword, page: () => const ResetPasswordScreen()),
     GetPage(name: otpVerification, page: () => const OTPVerificationScreen()),
     GetPage(name: forgotPassword, page: () => const ForgotPasswordScreen()),
-    GetPage(name: home, page: () => const HomeScreen()),
+    GetPage(name: logout, page: () => const LogoutScreen()),
+    // Navigate to the MainScreen with the appropriate tab selected when
+    // these top-level routes are used (e.g., from the drawer).
+    GetPage(name: home, page: () => const MainScreen(initialIndex: 0)),
     GetPage(name: main, page: () => const MainScreen()),
     GetPage(name: profile, page: () => const ProfileScreen()),
-    GetPage(name: wishlist, page: () => const WishlistScreen()),
-    GetPage(name: cart, page: () => const CartScreen()),
-    GetPage(name: search, page: () => const SearchScreen()),
-    GetPage(name: settings, page: () => const SettingsScreen()),
+    GetPage(name: wishlist, page: () => const MainScreen(initialIndex: 1)),
+    GetPage(name: cart, page: () => const MainScreen(initialIndex: 2)),
+    GetPage(name: search, page: () => const MainScreen(initialIndex: 3)),
+    GetPage(name: settings, page: () => const MainScreen(initialIndex: 4)),
   ];
 }

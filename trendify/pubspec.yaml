@@ -41,12 +41,12 @@ flutter:
 
   assets:
     - assets/images/
-    - assets/images/category_images/
     - assets/images/default_avatar.png
     - assets/images/logo.png
     - assets/icons/
     - assets/logos/
     - assets/images/on_boarding_images/
+    - assets/images/product_images/
 
   fonts:
     - family: poppins
