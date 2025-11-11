@@ -4,6 +4,8 @@ import 'package:trendify/utils/constants/colors.dart';
 import 'package:trendify/common/widgets/navigation/trendy_bottom_nav.dart';
 import 'package:trendify/features/shop/screens/main_screen.dart';
 import 'package:trendify/features/shop/screens/products/product_card.dart';
+import 'package:trendify/features/shop/screens/products/product_details.dart';
+import 'package:trendify/features/shop/services/cart_wishlist_store.dart';
 import 'package:trendify/features/shop/screens/products/product_data.dart';
 
 class CategoryScreen extends StatelessWidget {
@@ -108,15 +110,29 @@ class CategoryScreen extends StatelessWidget {
                             ? (p['rating'] as num).toDouble()
                             : null,
                         reviewsCount: p['reviews'] as int?,
+                        onTap: () {
+                          // Navigate to details page with product data
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => ProductDetailsPage(
+                                categoryName: categoryName,
+                                product: p,
+                              ),
+                            ),
+                          );
+                        },
                         onFavoriteTap: () {
-                          // placeholder: toggle favorite locally or show message
-                          // ignore: avoid_print
-                          print('Favorite tapped for ${p['title']}');
+                          CartWishlistStore.instance.addToWishlist(p);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Added to wishlist')),
+                          );
                         },
                         onAddToCart: () {
-                          // placeholder: add to cart
-                          // ignore: avoid_print
-                          print('Add to cart ${p['title']}');
+                          CartWishlistStore.instance.addToCart(p);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Added to cart')),
+                          );
                         },
                       );
                     },
