@@ -40,18 +40,19 @@ class ProductDetailsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Product image
+            // Product image: use an AspectRatio so image scales across screen sizes
             ClipRRect(
               borderRadius: BorderRadius.circular(TSizes.cardRadiusLg),
-              child: Image.asset(
-                product['image'] as String,
-                width: double.infinity,
-                height: 220,
-                fit: BoxFit.cover,
-                errorBuilder: (c, e, st) => Container(
-                  height: 220,
-                  color: TColors.softGrey,
-                  child: const Center(child: Icon(Icons.image_not_supported)),
+              child: AspectRatio(
+                aspectRatio: 16 / 9,
+                child: Image.asset(
+                  product['image'] as String,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                  errorBuilder: (c, e, st) => Container(
+                    color: TColors.softGrey,
+                    child: const Center(child: Icon(Icons.image_not_supported)),
+                  ),
                 ),
               ),
             ),

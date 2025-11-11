@@ -1,4 +1,5 @@
 import 'package:trendify/features/shop/screens/home/widgets/category_section.dart';
+import 'package:trendify/features/shop/screens/home/widgets/home_body.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -9,7 +10,7 @@ class HomeScreen extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [CategorySection(), SizedBox(height: 24)],
+        children: const [CategorySection(), SizedBox(height: 24), HomeBody()],
       ),
     );
   }

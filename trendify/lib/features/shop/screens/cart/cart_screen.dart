@@ -17,9 +17,14 @@ class CartScreen extends StatelessWidget {
 
         return Padding(
           padding: const EdgeInsets.all(TSizes.md),
-          child: ListView.separated(
+          child: GridView.builder(
             itemCount: items.length,
-            separatorBuilder: (_, __) => const SizedBox(height: TSizes.sm),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 0.62,
+              crossAxisSpacing: TSizes.gridViewSpacing,
+              mainAxisSpacing: TSizes.gridViewSpacing,
+            ),
             itemBuilder: (context, index) {
               final p = items[index];
               return ProductCard(

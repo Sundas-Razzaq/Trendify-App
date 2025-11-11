@@ -17,34 +17,57 @@ class WishlistScreen extends StatelessWidget {
 
         return Padding(
           padding: const EdgeInsets.all(TSizes.md),
-          child: GridView.builder(
-            itemCount: items.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 0.62,
-              crossAxisSpacing: TSizes.gridViewSpacing,
-              mainAxisSpacing: TSizes.gridViewSpacing,
-            ),
-            itemBuilder: (context, index) {
-              final p = items[index];
-              return ProductCard(
-                imagePath: p['image'] as String,
-                title: p['title'] as String,
-                subtitle: p['subtitle'] as String?,
-                price: (p['price'] as num).toDouble(),
-                oldPrice: p['oldPrice'] != null
-                    ? (p['oldPrice'] as num).toDouble()
-                    : null,
-                onAddToCart: () {
-                  CartWishlistStore.instance.addToCart(p);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Added to cart')),
-                  );
-                },
-                onFavoriteTap: () {
-                  CartWishlistStore.instance.removeFromWishlist(p);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Removed from wishlist')),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              // Determine crossAxisCount responsively
+              int crossAxisCount = 2;
+              final width = constraints.maxWidth;
+              if (width > 1100) {
+                crossAxisCount = 5;
+              } else if (width > 900) {
+                crossAxisCount = 4;
+              } else if (width > 600) {
+                crossAxisCount = 3;
+              }
+
+              final horizontalPadding = TSizes.md * 2;
+              final cardWidth =
+                  (width -
+                      (crossAxisCount - 1) * TSizes.gridViewSpacing -
+                      horizontalPadding) /
+                  crossAxisCount;
+              final childAspectRatio = cardWidth / (cardWidth * 1.6);
+
+              return GridView.builder(
+                itemCount: items.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: crossAxisCount,
+                  childAspectRatio: childAspectRatio,
+                  crossAxisSpacing: TSizes.gridViewSpacing,
+                  mainAxisSpacing: TSizes.gridViewSpacing,
+                ),
+                itemBuilder: (context, index) {
+                  final p = items[index];
+                  return ProductCard(
+                    imagePath: p['image'] as String,
+                    title: p['title'] as String,
+                    subtitle: p['subtitle'] as String?,
+                    price: (p['price'] as num).toDouble(),
+                    oldPrice: p['oldPrice'] != null
+                        ? (p['oldPrice'] as num).toDouble()
+                        : null,
+                    onAddToCart: () {
+                      CartWishlistStore.instance.addToCart(p);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Added to cart')),
+                      );
+                    },
+                    onFavoriteTap: () {
+                      CartWishlistStore.instance.removeFromWishlist(p);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Removed from wishlist')),
+                      );
+                    },
                   );
                 },
               );

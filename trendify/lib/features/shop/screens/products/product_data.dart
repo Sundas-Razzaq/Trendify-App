@@ -127,3 +127,16 @@ const Map<String, List<Map<String, dynamic>>> categoryProducts = {
     },
   ],
 };
+
+/// Small helper to access products by category. This keeps your existing
+/// `categoryProducts` data and provides the requested API `ProductData.getProductsByCategory`.
+class ProductData {
+  ProductData._();
+
+  static List<Map<String, dynamic>> getProductsByCategory(String category) {
+    final list = categoryProducts[category];
+    return list != null
+        ? List<Map<String, dynamic>>.from(list)
+        : <Map<String, dynamic>>[];
+  }
+}

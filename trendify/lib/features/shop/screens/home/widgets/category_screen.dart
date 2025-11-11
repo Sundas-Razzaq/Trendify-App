@@ -82,11 +82,21 @@ class CategoryScreen extends StatelessWidget {
                 builder: (context, constraints) {
                   final width = constraints.maxWidth;
                   int crossAxisCount = 2;
-                  if (width > 900) {
+                  if (width > 1200) {
+                    crossAxisCount = 5;
+                  } else if (width > 900) {
                     crossAxisCount = 4;
                   } else if (width > 600) {
                     crossAxisCount = 3;
                   }
+
+                  final horizontalPadding = TSizes.md * 2;
+                  final cardWidth =
+                      (width -
+                          (crossAxisCount - 1) * TSizes.gridViewSpacing -
+                          horizontalPadding) /
+                      crossAxisCount;
+                  final childAspectRatio = cardWidth / (cardWidth * 1.6);
 
                   return GridView.builder(
                     itemCount: products.length,
@@ -94,7 +104,7 @@ class CategoryScreen extends StatelessWidget {
                       crossAxisCount: crossAxisCount,
                       mainAxisSpacing: TSizes.gridViewSpacing,
                       crossAxisSpacing: TSizes.gridViewSpacing,
-                      childAspectRatio: 0.62,
+                      childAspectRatio: childAspectRatio,
                     ),
                     itemBuilder: (context, index) {
                       final p = products[index];
