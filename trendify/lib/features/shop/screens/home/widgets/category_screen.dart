@@ -3,6 +3,8 @@ import 'package:trendify/utils/constants/sizes.dart';
 import 'package:trendify/utils/constants/colors.dart';
 import 'package:trendify/common/widgets/navigation/trendy_bottom_nav.dart';
 import 'package:trendify/features/shop/screens/main_screen.dart';
+import 'package:trendify/features/shop/screens/products/product_card.dart';
+import 'package:trendify/features/shop/screens/products/product_data.dart';
 
 class CategoryScreen extends StatelessWidget {
   final String categoryName;
@@ -10,6 +12,9 @@ class CategoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Products are loaded from product_data.dart via `categoryProducts` map.
+    final products = categoryProducts[categoryName] ?? <Map<String, dynamic>>[];
+
     return Scaffold(
       appBar: AppBar(
         leading: const BackButton(),
@@ -18,83 +23,109 @@ class CategoryScreen extends StatelessWidget {
         elevation: 0,
         foregroundColor: TColors.textprimary,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: TSizes.md,
-            vertical: TSizes.sm,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Search bar
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search in $categoryName',
-                  prefixIcon: const Icon(Icons.search),
-                  contentPadding: const EdgeInsets.symmetric(
-                    vertical: 0,
-                    horizontal: TSizes.md,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(TSizes.borderRadiusLg),
-                    borderSide: BorderSide.none,
-                  ),
-                  filled: true,
-                  fillColor: TColors.softGrey,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: TSizes.md,
+          vertical: TSizes.sm,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Search bar
+            TextField(
+              decoration: InputDecoration(
+                hintText: 'Search in $categoryName',
+                prefixIcon: const Icon(Icons.search),
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 0,
+                  horizontal: TSizes.md,
                 ),
-              ),
-
-              const SizedBox(height: TSizes.sm),
-              // Sort & Filter Row
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: () {},
-                      icon: const Icon(Icons.sort),
-                      label: const Text('Sort'),
-                    ),
-                  ),
-                  const SizedBox(width: TSizes.sm),
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: () {},
-                      icon: const Icon(Icons.filter_list),
-                      label: const Text('Filter'),
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: TSizes.md),
-
-              // Placeholder for product list/cards
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(TSizes.md),
-                decoration: BoxDecoration(
-                  color: TColors.softGrey.withAlpha(51),
-                  borderRadius: BorderRadius.circular(TSizes.borderRadiusSm),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(TSizes.borderRadiusLg),
+                  borderSide: BorderSide.none,
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text(
-                      'Products will appear here',
-                      style: TextStyle(
-                        fontSize: TSizes.fontSizeMd,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    SizedBox(height: TSizes.sm),
-                    // TODO: Add product cards/grid here
-                    SizedBox(height: 200),
-                  ],
-                ),
+                filled: true,
+                fillColor: TColors.softGrey,
               ),
-            ],
-          ),
+            ),
+
+            const SizedBox(height: TSizes.sm),
+
+            // Sort & Filter Row
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: () {},
+                    icon: const Icon(Icons.sort),
+                    label: const Text('Sort'),
+                  ),
+                ),
+                const SizedBox(width: TSizes.sm),
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: () {},
+                    icon: const Icon(Icons.filter_list),
+                    label: const Text('Filter'),
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: TSizes.md),
+
+            // Grid of products
+            Expanded(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final width = constraints.maxWidth;
+                  int crossAxisCount = 2;
+                  if (width > 900) {
+                    crossAxisCount = 4;
+                  } else if (width > 600) {
+                    crossAxisCount = 3;
+                  }
+
+                  return GridView.builder(
+                    itemCount: products.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCount,
+                      mainAxisSpacing: TSizes.gridViewSpacing,
+                      crossAxisSpacing: TSizes.gridViewSpacing,
+                      childAspectRatio: 0.62,
+                    ),
+                    itemBuilder: (context, index) {
+                      final p = products[index];
+                      return ProductCard(
+                        imagePath: p['image'] as String,
+                        title: p['title'] as String,
+                        subtitle: p['subtitle'] as String?,
+                        price: (p['price'] as num).toDouble(),
+                        oldPrice: p['oldPrice'] != null
+                            ? (p['oldPrice'] as num).toDouble()
+                            : null,
+                        rating: p['rating'] != null
+                            ? (p['rating'] as num).toDouble()
+                            : null,
+                        reviewsCount: p['reviews'] as int?,
+                        onFavoriteTap: () {
+                          // placeholder: toggle favorite locally or show message
+                          // ignore: avoid_print
+                          print('Favorite tapped for ${p['title']}');
+                        },
+                        onAddToCart: () {
+                          // placeholder: add to cart
+                          // ignore: avoid_print
+                          print('Add to cart ${p['title']}');
+                        },
+                      );
+                    },
+                    padding: const EdgeInsets.only(bottom: TSizes.md),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: TrendyBottomNav(
