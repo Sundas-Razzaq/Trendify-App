@@ -8,6 +8,12 @@ import 'package:trendify/features/authentication/screens/forgot_password_screen.
 import 'package:trendify/features/authentication/screens/logout_screen.dart';
 import 'package:trendify/features/shop/screens/main_screen.dart';
 import 'package:trendify/features/seller/screens/seller_dashboard.dart';
+import 'package:trendify/features/seller/screens/seller_main.dart';
+import 'package:trendify/features/seller/screens/seller_add_product.dart';
+import 'package:trendify/features/seller/screens/seller_manage_products.dart';
+import 'package:trendify/features/seller/screens/seller_orders.dart';
+import 'package:trendify/features/seller/screens/seller_inventory.dart';
+import 'package:trendify/features/seller/screens/seller_reviews.dart';
 import 'package:trendify/features/shop/screens/home/widgets/decide.dart';
 import 'package:trendify/features/profile/screens/profile_screen.dart';
 // Individual tab screens are shown via `MainScreen` with an initial index.
@@ -24,6 +30,13 @@ class AppRoutes {
   static const String main = '/main';
   static const String decide = '/decide';
   static const String sellerDashboard = '/seller-dashboard';
+  // Seller routes
+  static const String sellerMain = '/seller';
+  static const String sellerAddProduct = '/seller/add-product';
+  static const String sellerManageProducts = '/seller/manage-products';
+  static const String sellerOrders = '/seller/orders';
+  static const String sellerInventory = '/seller/inventory';
+  static const String sellerReviews = '/seller/reviews';
   static const String profile = '/profile';
   static const String wishlist = '/wishlist';
   static const String cart = '/cart';
@@ -45,6 +58,16 @@ class AppRoutes {
     GetPage(name: decide, page: () => const DecideScreen()),
     // Seller dashboard route
     GetPage(name: sellerDashboard, page: () => const SellerDashboard()),
+    // Seller main (panel)
+    GetPage(name: sellerMain, page: () => const SellerMain()),
+    GetPage(name: sellerAddProduct, page: () => const SellerAddProduct()),
+    GetPage(
+      name: sellerManageProducts,
+      page: () => const SellerManageProducts(),
+    ),
+    GetPage(name: sellerOrders, page: () => const SellerOrders()),
+    GetPage(name: sellerInventory, page: () => const SellerInventory()),
+    GetPage(name: sellerReviews, page: () => const SellerReviews()),
     // Navigate to the MainScreen with the appropriate tab selected when
     // these top-level routes are used (e.g., from the drawer).
     GetPage(name: home, page: () => const MainScreen(initialIndex: 0)),

@@ -16,14 +16,12 @@ class DecideScreen extends StatelessWidget {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          /// ✅ Background Image (no grey shading now)
           Image.asset(
             TImages.decide,
             fit: BoxFit.cover,
             errorBuilder: (c, e, st) => const SizedBox.shrink(),
           ),
 
-          /// ✅ Buttons positioned bottom center
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: TSizes.md),
@@ -74,7 +72,8 @@ class DecideScreen extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        Get.offAllNamed(AppRoutes.sellerDashboard);
+                        // Open the seller main panel which includes appbar, drawer and bottom nav
+                        Get.offAllNamed(AppRoutes.sellerMain);
                       },
                       child: const Text(
                         'Seller',
