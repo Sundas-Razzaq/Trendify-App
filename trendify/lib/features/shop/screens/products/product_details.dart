@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:trendify/utils/constants/sizes.dart';
 import 'package:trendify/utils/constants/colors.dart';
 import 'package:trendify/common/widgets/navigation/trendy_bottom_nav.dart';
@@ -127,6 +128,25 @@ class ProductDetailsPage extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+
+            const SizedBox(height: TSizes.sm),
+            // Buy Now -> go to place order screen
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  // Navigate to place order with product info
+                  Get.toNamed(
+                    '/place-order',
+                    arguments: {'product': product, 'category': categoryName},
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: TColors.primary,
+                ),
+                child: const Text('Buy Now'),
+              ),
             ),
 
             const SizedBox(height: TSizes.md),
