@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:trendify/utils/validators/validation.dart';
 import 'package:trendify/utils/constants/texts_strings.dart';
+import 'package:trendify/features/authentication/widgets/auth_styles.dart';
+import 'package:trendify/utils/constants/sizes.dart';
+import 'package:trendify/utils/constants/colors.dart';
 
 class ResetPasswordScreen extends StatelessWidget {
   const ResetPasswordScreen({super.key});
@@ -11,50 +14,60 @@ class ResetPasswordScreen extends StatelessWidget {
     final passwordController = TextEditingController();
     final confirmPasswordController = TextEditingController();
     return Scaffold(
-      appBar: AppBar(title: const Text(TTexts.resetPasswordTitle)),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextFormField(
-                controller: passwordController,
-                decoration: const InputDecoration(
-                  labelText: TTexts.signupPasswordLabel,
+      backgroundColor: TColors.light,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 28),
+          child: Form(
+            key: formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: TSizes.spaceBtwSections),
+                Text('Reset password', style: authHeadingStyle(context)),
+                const SizedBox(height: TSizes.spaceBtwItems),
+
+                TextFormField(
+                  controller: passwordController,
+                  decoration: authInputDecoration(
+                    hint: TTexts.signupPasswordLabel,
+                    prefix: Icons.lock,
+                  ),
+                  obscureText: true,
+                  validator: TValidator.validatePassword,
                 ),
-                obscureText: true,
-                validator: TValidator.validatePassword,
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: confirmPasswordController,
-                decoration: const InputDecoration(
-                  labelText: TTexts.signupConfirmPasswordLabel,
-                ),
-                obscureText: true,
-                validator: (value) {
-                  if (value != passwordController.text) {
-                    return 'Passwords do not match';
-                  }
-                  return TValidator.validatePassword(value);
-                },
-              ),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {
-                      // Only UI navigation: After password reset, go to login page
-                      Navigator.pushReplacementNamed(context, '/login');
+                const SizedBox(height: 16),
+
+                TextFormField(
+                  controller: confirmPasswordController,
+                  decoration: authInputDecoration(
+                    hint: TTexts.signupConfirmPasswordLabel,
+                    prefix: Icons.lock,
+                  ),
+                  obscureText: true,
+                  validator: (value) {
+                    if (value != passwordController.text) {
+                      return 'Passwords do not match';
                     }
+                    return TValidator.validatePassword(value);
                   },
-                  child: const Text(TTexts.resetPasswordButton),
                 ),
-              ),
-            ],
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: ElevatedButton(
+                    style: authButtonStyle(),
+                    onPressed: () {
+                      if (formKey.currentState!.validate()) {
+                        Navigator.pushReplacementNamed(context, '/login');
+                      }
+                    },
+                    child: const Text(TTexts.resetPasswordButton),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

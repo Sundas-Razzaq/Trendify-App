@@ -59,7 +59,12 @@ class HomeDrawer extends StatelessWidget {
               'Wishlist',
               AppRoutes.wishlist,
             ),
-            _drawerTile(context, Icons.shopping_bag, 'Orders', AppRoutes.cart),
+            _drawerTile(
+              context,
+              Icons.shopping_bag,
+              'Orders',
+              AppRoutes.orders,
+            ),
             _drawerTile(
               context,
               Icons.settings,

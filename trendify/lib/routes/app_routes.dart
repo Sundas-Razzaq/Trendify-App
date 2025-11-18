@@ -17,6 +17,7 @@ import 'package:trendify/features/seller/screens/seller_reviews.dart';
 import 'package:trendify/features/shop/screens/products/place_order.dart';
 import 'package:trendify/features/shop/screens/products/checkout.dart';
 import 'package:trendify/features/shop/screens/home/widgets/decide.dart';
+import 'package:trendify/features/shop/screens/orders/orders_screen.dart';
 import 'package:trendify/features/profile/screens/profile_screen.dart';
 // Individual tab screens are shown via `MainScreen` with an initial index.
 
@@ -41,6 +42,7 @@ class AppRoutes {
   static const String sellerReviews = '/seller/reviews';
   static const String placeOrder = '/place-order';
   static const String checkout = '/checkout';
+  static const String orders = '/orders';
   static const String profile = '/profile';
   static const String wishlist = '/wishlist';
   static const String cart = '/cart';
@@ -75,6 +77,7 @@ class AppRoutes {
     // Product checkout flow
     GetPage(name: placeOrder, page: () => const PlaceOrderPage()),
     GetPage(name: checkout, page: () => const CheckoutPage()),
+    GetPage(name: orders, page: () => const OrdersScreen()),
     // Navigate to the MainScreen with the appropriate tab selected when
     // these top-level routes are used (e.g., from the drawer).
     GetPage(name: home, page: () => const MainScreen(initialIndex: 0)),

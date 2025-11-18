@@ -4,6 +4,7 @@ import 'package:trendify/utils/constants/sizes.dart';
 import 'package:trendify/utils/constants/texts_strings.dart';
 import 'package:trendify/utils/validators/validation.dart';
 import 'package:trendify/routes/app_routes.dart';
+import 'package:trendify/features/authentication/widgets/auth_styles.dart';
 
 class SignupScreen extends StatelessWidget {
   const SignupScreen({super.key});
@@ -11,80 +12,82 @@ class SignupScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: TColors.light,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(TSizes.defaultSpace),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 28),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SizedBox(height: TSizes.spaceBtwItems),
+              const SizedBox(height: TSizes.spaceBtwSections),
+              Text('Create an account', style: authHeadingStyle(context)),
+              const SizedBox(height: TSizes.spaceBtwItems),
               Text(
-                TTexts.signupTitle,
-                style: Theme.of(
-                  context,
-                ).textTheme.headlineMedium?.copyWith(color: TColors.primary),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: TSizes.spaceBtwItems),
-              Text(
-                TTexts.signupSubtitle,
+                'Sign up to get started',
                 style: Theme.of(context).textTheme.bodyMedium,
-                textAlign: TextAlign.center,
               ),
-              SizedBox(height: TSizes.spaceBtwSections),
+              const SizedBox(height: TSizes.spaceBtwSections),
+
               // Name Field
               TextFormField(
-                decoration: InputDecoration(
-                  labelText: TTexts.signupNameLabel,
-                  prefixIcon: Icon(Icons.person, color: TColors.primary),
+                decoration: authInputDecoration(
+                  hint: TTexts.signupNameLabel,
+                  prefix: Icons.person,
                 ),
                 keyboardType: TextInputType.name,
                 validator: TValidator.valiNamedate,
               ),
-              SizedBox(height: TSizes.spaceBtwItems),
+              const SizedBox(height: TSizes.spaceBtwItems),
+
               // Email Field
               TextFormField(
-                decoration: InputDecoration(
-                  labelText: TTexts.signupEmailLabel,
-                  prefixIcon: Icon(Icons.email, color: TColors.primary),
+                decoration: authInputDecoration(
+                  hint: TTexts.signupEmailLabel,
+                  prefix: Icons.email,
                 ),
                 keyboardType: TextInputType.emailAddress,
                 validator: TValidator.validateEmail,
               ),
-              SizedBox(height: TSizes.spaceBtwItems),
+              const SizedBox(height: TSizes.spaceBtwItems),
+
               // Password Field
               TextFormField(
-                decoration: InputDecoration(
-                  labelText: TTexts.signupPasswordLabel,
-                  prefixIcon: Icon(Icons.lock, color: TColors.primary),
+                decoration: authInputDecoration(
+                  hint: TTexts.signupPasswordLabel,
+                  prefix: Icons.lock,
                 ),
                 obscureText: true,
                 validator: TValidator.validatePassword,
               ),
-              SizedBox(height: TSizes.spaceBtwItems),
+              const SizedBox(height: TSizes.spaceBtwItems),
+
               // Confirm Password Field
               TextFormField(
-                decoration: InputDecoration(
-                  labelText: TTexts.signupConfirmPasswordLabel,
-                  prefixIcon: Icon(Icons.lock, color: TColors.primary),
+                decoration: authInputDecoration(
+                  hint: TTexts.signupConfirmPasswordLabel,
+                  prefix: Icons.lock,
                 ),
                 obscureText: true,
                 validator: (value) {
                   return null;
                 },
               ),
-              SizedBox(height: TSizes.spaceBtwSections),
+              const SizedBox(height: TSizes.spaceBtwSections),
+
               // Signup Button
               SizedBox(
                 width: double.infinity,
+                height: 56,
                 child: ElevatedButton(
+                  style: authButtonStyle(),
                   onPressed: () {
                     Navigator.pushReplacementNamed(context, AppRoutes.decide);
                   },
                   child: Text(TTexts.signupButton),
                 ),
               ),
-              SizedBox(height: TSizes.spaceBtwItems),
+              const SizedBox(height: TSizes.spaceBtwItems),
+
               // Link to Login
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -96,7 +99,7 @@ class SignupScreen extends StatelessWidget {
                     },
                     child: Text(
                       TTexts.signupLoginLink,
-                      style: TextStyle(color: TColors.primary),
+                      style: const TextStyle(color: Color(0xFFE94B4B)),
                     ),
                   ),
                 ],

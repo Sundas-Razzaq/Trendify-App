@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:trendify/utils/constants/sizes.dart';
 import 'package:trendify/utils/constants/colors.dart';
+import 'package:trendify/features/shop/models/order.dart';
+import 'package:trendify/features/shop/services/orders_store.dart';
+import 'package:trendify/routes/app_routes.dart';
 
 class CheckoutPage extends StatelessWidget {
   const CheckoutPage({super.key});
@@ -32,9 +35,42 @@ class CheckoutPage extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  // Finalize order - for demo we'll just pop to root
-                  Get.offAllNamed('/');
+                onPressed: () async {
+                  // Create a simple order and add to store
+                  final id = DateTime.now().millisecondsSinceEpoch.toString();
+                  final items = <Map<String, dynamic>>[];
+                  double total = 0.0;
+                  if (product != null) {
+                    items.add(Map<String, dynamic>.from(product));
+                    total = (product['price'] ?? 0) as double;
+                  }
+
+                  final order = Order(
+                    id: id,
+                    items: items,
+                    total: total,
+                    date: DateTime.now(),
+                  );
+                  OrdersStore().addOrder(order);
+
+                  // show confirmation dialog then navigate to Orders screen
+                  await showDialog<void>(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text('Order placed'),
+                      content: const Text(
+                        'Your order has been placed successfully.',
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    ),
+                  );
+
+                  Get.offAllNamed(AppRoutes.orders);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: TColors.primary,

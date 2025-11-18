@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:trendify/utils/validators/validation.dart';
 import 'package:trendify/utils/constants/texts_strings.dart';
 import 'package:trendify/routes/app_routes.dart';
+import 'package:trendify/utils/constants/sizes.dart';
+import 'package:trendify/utils/constants/colors.dart';
+import 'package:trendify/features/authentication/widgets/auth_styles.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -13,51 +16,100 @@ class LoginScreen extends StatelessWidget {
     final emailController = TextEditingController();
     final passwordController = TextEditingController();
     return Scaffold(
-      appBar: AppBar(title: const Text(TTexts.loginTitle)),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextFormField(
-                controller: emailController,
-                decoration: const InputDecoration(
-                  labelText: TTexts.loginEmailLabel,
+      backgroundColor: TColors.light,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 28),
+          child: Form(
+            key: formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: TSizes.spaceBtwSections),
+                Text('Welcome Back!', style: authHeadingStyle(context)),
+                const SizedBox(height: TSizes.spaceBtwItems),
+                Text(
+                  'Sign in to continue',
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                validator: TValidator.validateEmail,
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: passwordController,
-                decoration: const InputDecoration(
-                  labelText: TTexts.loginPasswordLabel,
+                const SizedBox(height: TSizes.spaceBtwSections),
+
+                // Email
+                TextFormField(
+                  controller: emailController,
+                  decoration: authInputDecoration(
+                    hint: TTexts.loginEmailLabel,
+                    prefix: Icons.person,
+                  ),
+                  validator: TValidator.validateEmail,
                 ),
-                obscureText: true,
-                validator: TValidator.validatePassword,
-              ),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {
-                      // After login, navigate to the decide screen so the
-                      // user can choose Customer vs Seller flows.
-                      Navigator.pushReplacementNamed(context, AppRoutes.decide);
-                    }
-                  },
-                  child: const Text(TTexts.loginButton),
+                const SizedBox(height: 16),
+
+                // Password
+                TextFormField(
+                  controller: passwordController,
+                  decoration: authInputDecoration(
+                    hint: TTexts.loginPasswordLabel,
+                    prefix: Icons.lock,
+                  ),
+                  obscureText: true,
+                  validator: TValidator.validatePassword,
                 ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/forgot-password');
-                },
-                child: const Text(TTexts.loginForgotPassword),
-              ),
-            ],
+                const SizedBox(height: 20),
+
+                SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: ElevatedButton(
+                    style: authButtonStyle(),
+                    onPressed: () {
+                      if (formKey.currentState!.validate()) {
+                        Navigator.pushReplacementNamed(
+                          context,
+                          AppRoutes.decide,
+                        );
+                      }
+                    },
+                    child: const Text(TTexts.loginButton),
+                  ),
+                ),
+
+                const SizedBox(height: 12),
+                TextButton(
+                  onPressed: () =>
+                      Navigator.pushNamed(context, '/forgot-password'),
+                  child: Text(
+                    TTexts.loginForgotPassword,
+                    style: TextStyle(color: TColors.primary),
+                  ),
+                ),
+
+                const SizedBox(height: TSizes.lg),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [const Text('- OR Continue with -')],
+                ),
+                const SizedBox(height: TSizes.sm),
+                // social icons could be added here
+                const SizedBox(height: TSizes.lg),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('Don\'t have an account? '),
+                    TextButton(
+                      onPressed: () => Navigator.pushReplacementNamed(
+                        context,
+                        AppRoutes.signup,
+                      ),
+                      child: Text(
+                        'Sign Up',
+                        style: TextStyle(color: TColors.primary),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
