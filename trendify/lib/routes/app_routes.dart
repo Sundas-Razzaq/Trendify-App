@@ -6,6 +6,7 @@ import 'package:trendify/features/authentication/screens/reset_password_screen.d
 import 'package:trendify/features/authentication/screens/otp_verification_screen.dart';
 import 'package:trendify/features/authentication/screens/forgot_password_screen.dart';
 import 'package:trendify/features/authentication/screens/logout_screen.dart';
+import 'package:trendify/bindings/auth_binding.dart';
 import 'package:trendify/features/shop/screens/main_screen.dart';
 import 'package:trendify/features/seller/screens/seller_dashboard.dart';
 import 'package:trendify/features/seller/screens/seller_main.dart';
@@ -50,16 +51,41 @@ class AppRoutes {
   static const String settings = '/settings';
 
   static final routes = [
-    GetPage(name: signup, page: () => const SignupScreen()),
-    GetPage(name: login, page: () => const LoginScreen()),
+    GetPage(
+      name: signup,
+      page: () => const SignupScreen(),
+      binding: AuthBinding(),
+    ),
+    GetPage(
+      name: login,
+      page: () => const LoginScreen(),
+      binding: AuthBinding(),
+    ),
     GetPage(
       name: emailVerification,
       page: () => const EmailVerificationScreen(),
+      binding: AuthBinding(),
     ),
-    GetPage(name: resetPassword, page: () => const ResetPasswordScreen()),
-    GetPage(name: otpVerification, page: () => const OTPVerificationScreen()),
-    GetPage(name: forgotPassword, page: () => const ForgotPasswordScreen()),
-    GetPage(name: logout, page: () => const LogoutScreen()),
+    GetPage(
+      name: resetPassword,
+      page: () => const ResetPasswordScreen(),
+      binding: AuthBinding(),
+    ),
+    GetPage(
+      name: otpVerification,
+      page: () => const OTPVerificationScreen(),
+      binding: AuthBinding(),
+    ),
+    GetPage(
+      name: forgotPassword,
+      page: () => const ForgotPasswordScreen(),
+      binding: AuthBinding(),
+    ),
+    GetPage(
+      name: logout,
+      page: () => const LogoutScreen(),
+      binding: AuthBinding(),
+    ),
     // Decide screen shown after signup/login to choose customer or seller
     GetPage(name: decide, page: () => const DecideScreen()),
     // Seller dashboard route

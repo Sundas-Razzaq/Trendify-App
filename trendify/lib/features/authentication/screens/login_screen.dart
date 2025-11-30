@@ -1,27 +1,26 @@
 import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
+import 'package:get/get.dart';
 import 'package:trendify/utils/validators/validation.dart';
 import 'package:trendify/utils/constants/texts_strings.dart';
 import 'package:trendify/routes/app_routes.dart';
 import 'package:trendify/utils/constants/sizes.dart';
 import 'package:trendify/utils/constants/colors.dart';
 import 'package:trendify/features/authentication/widgets/auth_styles.dart';
+import 'package:trendify/features/authentication/controllers/auth_controller.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormState>();
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
+    final AuthController controller = Get.find<AuthController>();
     return Scaffold(
       backgroundColor: TColors.light,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 28),
           child: Form(
-            key: formKey,
+            key: controller.formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -36,7 +35,7 @@ class LoginScreen extends StatelessWidget {
 
                 // Email
                 TextFormField(
-                  controller: emailController,
+                  controller: controller.emailController,
                   decoration: authInputDecoration(
                     hint: TTexts.loginEmailLabel,
                     prefix: Icons.person,
@@ -47,7 +46,7 @@ class LoginScreen extends StatelessWidget {
 
                 // Password
                 TextFormField(
-                  controller: passwordController,
+                  controller: controller.passwordController,
                   decoration: authInputDecoration(
                     hint: TTexts.loginPasswordLabel,
                     prefix: Icons.lock,
@@ -62,15 +61,18 @@ class LoginScreen extends StatelessWidget {
                   height: 56,
                   child: ElevatedButton(
                     style: authButtonStyle(),
-                    onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        Navigator.pushReplacementNamed(
-                          context,
-                          AppRoutes.decide,
-                        );
-                      }
+                    onPressed: () async {
+                      await controller.login();
                     },
-                    child: const Text(TTexts.loginButton),
+                    child: Obx(
+                      () => controller.isLoading.value
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(),
+                            )
+                          : const Text(TTexts.loginButton),
+                    ),
                   ),
                 ),
 
