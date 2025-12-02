@@ -19,6 +19,10 @@ class TImages {
   static const String onboardingImage3 =
       'assets/images/on_boarding_images/line_dilivery.png';
 
+  //banner images
+  static const String bannerImage1 = 'assets/images/banner1.jpg';
+  static const String bannerImage2 = 'assets/images/banner2.jpg';
+
   //product images
   static const String productImage1 =
       'assets/images/product_images/beauty1.jpg';

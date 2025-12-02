@@ -19,12 +19,7 @@ class _HomeBodyState extends State<HomeBody> {
   late Timer _timer;
   int _currentPage = 0;
 
-  final List<String> _banners = [
-    TImages.productImage1,
-    TImages.productImage2,
-    TImages.productImage3,
-    TImages.productImage4,
-  ];
+  final List<String> _banners = [TImages.bannerImage1, TImages.bannerImage2];
 
   @override
   void initState() {

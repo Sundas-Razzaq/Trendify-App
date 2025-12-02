@@ -6,9 +6,6 @@ import 'app.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Use the web config map provided in `firebase_options.dart` to construct
-  // a `FirebaseOptions` instance. Non-null assertions are used for required
-  // fields to satisfy the constructor's requirements.
   await Firebase.initializeApp(
     options: FirebaseOptions(
       apiKey: DefaultFirebaseOptions.firebaseConfigWeb['apiKey']!,
