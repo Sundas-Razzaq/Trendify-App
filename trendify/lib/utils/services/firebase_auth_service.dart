@@ -131,8 +131,7 @@ class FirebaseAuthService {
     }
   }
 
-  /// Google Sign-In without Firestore. If the signed-in user's displayName lacks a role marker,
-  /// we add a default role by updating the displayName.
+  /// Google Sign-In
   Future<AppUser?> signInWithGoogle({String defaultRole = 'customer'}) async {
     try {
       final googleUser = await _googleSignIn.signIn();
