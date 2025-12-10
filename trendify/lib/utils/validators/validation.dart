@@ -6,9 +6,11 @@ class TValidator {
     if (value.trim().length < 2) {
       return 'Name must be at least 2 characters';
     }
-    // FIX THIS LINE - Add $ at end and close the ]
-    if (!RegExp(r'^[a-zA-Z ]+$').hasMatch(value.trim())) {
-      return 'Name can only contain letters and spaces';
+    // Allow letters (including common accented letters), spaces, periods,
+    // hyphens and apostrophes which are common in personal names.
+    final nameRegex = RegExp(r"^[A-Za-zÀ-ÖØ-öø-ÿ .'\-]+$");
+    if (!nameRegex.hasMatch(value.trim())) {
+      return 'Name can only contain letters, spaces, apostrophes, hyphens and dots';
     }
     return null;
   }

@@ -19,6 +19,8 @@ import 'package:trendify/features/shop/screens/products/checkout.dart';
 import 'package:trendify/features/shop/screens/home/widgets/decide.dart';
 import 'package:trendify/features/shop/screens/orders/orders_screen.dart';
 import 'package:trendify/features/profile/screens/profile_screen.dart';
+import 'package:trendify/features/notification/screens/notifications_screen.dart';
+import 'package:trendify/features/notification/screens/admin_notification_panel.dart';
 // Individual tab screens are shown via `MainScreen` with an initial index.
 
 class AppRoutes {
@@ -48,6 +50,8 @@ class AppRoutes {
   static const String cart = '/cart';
   static const String search = '/search';
   static const String settings = '/settings';
+  static const String notifications = '/notifications';
+  static const String adminNotifications = '/admin/notifications';
 
   static final routes = [
     GetPage(name: signup, page: () => const SignupScreen()),
@@ -87,5 +91,10 @@ class AppRoutes {
     GetPage(name: cart, page: () => const MainScreen(initialIndex: 2)),
     GetPage(name: search, page: () => const MainScreen(initialIndex: 3)),
     GetPage(name: settings, page: () => const MainScreen(initialIndex: 4)),
+    GetPage(name: notifications, page: () => const NotificationsScreen()),
+    GetPage(
+      name: adminNotifications,
+      page: () => const AdminNotificationPanel(),
+    ),
   ];
 }

@@ -3,6 +3,8 @@ import 'package:trendify/utils/constants/colors.dart';
 import 'package:trendify/utils/constants/sizes.dart';
 import 'package:trendify/utils/constants/image_strings.dart';
 import 'package:trendify/routes/app_routes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:trendify/utils/services/notification_service.dart';
 
 class HomeDrawer extends StatelessWidget {
   const HomeDrawer({super.key});
@@ -65,11 +67,76 @@ class HomeDrawer extends StatelessWidget {
               'Orders',
               AppRoutes.orders,
             ),
+            _drawerTile(context, Icons.person, 'Profile', AppRoutes.profile),
+            _drawerTile(
+              context,
+              Icons.admin_panel_settings,
+              'Admin Panel (Notifications)',
+              AppRoutes.adminNotifications,
+            ),
             _drawerTile(
               context,
               Icons.settings,
               'Settings',
               AppRoutes.settings,
+            ),
+            // Notifications with unread badge
+            Builder(
+              builder: (ctx) {
+                final uid = FirebaseAuth.instance.currentUser?.uid;
+                if (uid == null) {
+                  return _drawerTile(
+                    context,
+                    Icons.notifications,
+                    'Notifications',
+                    AppRoutes.notifications,
+                  );
+                }
+                return StreamBuilder<List>(
+                  stream: NotificationService()
+                      .getNotificationsStream(uid)
+                      .map(
+                        (list) => list.where((n) => n.isRead == false).toList(),
+                      ),
+                  builder: (context, snap) {
+                    final unread = (snap.data ?? []).length;
+                    return ListTile(
+                      leading: Stack(
+                        children: [
+                          Icon(Icons.notifications, color: TColors.primary),
+                          if (unread > 0)
+                            Positioned(
+                              right: 0,
+                              top: 0,
+                              child: CircleAvatar(
+                                radius: 8,
+                                backgroundColor: Colors.red,
+                                child: Text(
+                                  '$unread',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                      title: Text(
+                        'Notifications',
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: TColors.primary,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, AppRoutes.notifications);
+                      },
+                    );
+                  },
+                );
+              },
             ),
             _drawerTile(context, Icons.help_outline, 'Help & Support'),
             const SizedBox(height: TSizes.spaceBtwSections),
