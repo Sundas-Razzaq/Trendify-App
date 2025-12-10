@@ -25,6 +25,8 @@ class NotificationService {
     required String title,
     required String body,
     String type = 'generic',
+    String? parentId,
+    bool isReply = false,
   }) async {
     final sender = _auth.currentUser?.uid ?? 'system';
     final path = NotificationModel.collectionPath(receiverId);
@@ -40,6 +42,8 @@ class NotificationService {
       timestamp: DateTime.now(),
       isRead: false,
       isSeen: false,
+      parentId: parentId,
+      isReply: isReply,
     );
     final data = model.toMap();
     try {

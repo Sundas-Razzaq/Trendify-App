@@ -10,6 +10,8 @@ class NotificationModel {
   final DateTime? timestamp;
   final bool isRead;
   final bool isSeen;
+  final String? parentId;
+  final bool isReply;
 
   NotificationModel({
     required this.id,
@@ -21,6 +23,8 @@ class NotificationModel {
     this.timestamp,
     this.isRead = false,
     this.isSeen = false,
+    this.parentId,
+    this.isReply = false,
   });
 
   factory NotificationModel.fromMap(String id, Map<String, dynamic> map) {
@@ -39,6 +43,8 @@ class NotificationModel {
       timestamp: ts,
       isRead: map['isRead'] as bool? ?? false,
       isSeen: map['isSeen'] as bool? ?? false,
+      parentId: map['parentId'] as String?,
+      isReply: map['isReply'] as bool? ?? false,
     );
   }
 
@@ -54,6 +60,8 @@ class NotificationModel {
           : FieldValue.serverTimestamp(),
       'isRead': isRead,
       'isSeen': isSeen,
+      'parentId': parentId,
+      'isReply': isReply,
     };
   }
 
