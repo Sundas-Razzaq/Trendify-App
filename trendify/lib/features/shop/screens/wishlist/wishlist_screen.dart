@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:trendify/features/shop/services/cart_wishlist_store.dart';
+import 'package:trendify/features/shop/shop_services/cart_wishlist_store.dart';
 import 'package:trendify/features/shop/screens/products/product_card.dart';
+import 'package:trendify/features/shop/models/product.dart';
 import 'package:trendify/utils/constants/sizes.dart';
 
 class WishlistScreen extends StatelessWidget {
@@ -8,7 +9,7 @@ class WishlistScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<List<Map<String, dynamic>>>(
+    return ValueListenableBuilder<List<Product>>(
       valueListenable: CartWishlistStore.instance.wishlist,
       builder: (context, items, _) {
         if (items.isEmpty) {
@@ -49,13 +50,7 @@ class WishlistScreen extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final p = items[index];
                   return ProductCard(
-                    imagePath: p['image'] as String,
-                    title: p['title'] as String,
-                    subtitle: p['subtitle'] as String?,
-                    price: (p['price'] as num).toDouble(),
-                    oldPrice: p['oldPrice'] != null
-                        ? (p['oldPrice'] as num).toDouble()
-                        : null,
+                    product: p,
                     onAddToCart: () {
                       CartWishlistStore.instance.addToCart(p);
                       ScaffoldMessenger.of(context).showSnackBar(

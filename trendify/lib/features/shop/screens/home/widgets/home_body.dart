@@ -4,8 +4,11 @@ import 'package:trendify/utils/constants/sizes.dart';
 import 'package:trendify/utils/constants/colors.dart';
 import 'package:trendify/utils/constants/image_strings.dart';
 import 'package:trendify/features/shop/screens/products/product_card.dart';
-import 'package:trendify/features/shop/screens/products/product_data.dart';
-import 'package:trendify/features/shop/services/cart_wishlist_store.dart';
+// import 'package:trendify/features/shop/screens/products/product_data.dart';
+import 'package:trendify/utils/services/product_service.dart';
+import 'package:trendify/features/shop/models/product.dart';
+import 'package:trendify/features/shop/shop_services/cart_wishlist_store.dart';
+import 'package:trendify/features/shop/screens/products/product_details.dart';
 
 class HomeBody extends StatefulWidget {
   const HomeBody({super.key});
@@ -16,6 +19,7 @@ class HomeBody extends StatefulWidget {
 
 class _HomeBodyState extends State<HomeBody> {
   final PageController _pageController = PageController(viewportFraction: 0.98);
+  final ProductService _productService = ProductService();
   late Timer _timer;
   int _currentPage = 0;
 
@@ -270,8 +274,6 @@ class _HomeBodyState extends State<HomeBody> {
   // PRODUCT ROW SECTION
   // ============================
   Widget _productRow(String title, String category, {bool accented = false}) {
-    final products = ProductData.getProductsByCategory(category);
-
     return LayoutBuilder(
       builder: (context, constraints) {
         final maxWidth = constraints.maxWidth;
@@ -323,36 +325,65 @@ class _HomeBodyState extends State<HomeBody> {
               // Product List
               SizedBox(
                 height: rowHeight,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: TSizes.md),
-                  itemCount: products.length,
-                  itemBuilder: (context, index) {
-                    final p = products[index];
+                child: StreamBuilder<List<Product>>(
+                  stream: _productService.getProductsByCategory(
+                    category.toLowerCase(),
+                  ),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    final products = snapshot.data ?? <Product>[];
 
-                    return SizedBox(
-                      width: itemWidth,
-                      child: ProductCard(
-                        imagePath: p['image'] as String,
-                        title: p['title'] as String,
-                        subtitle: p['subtitle'] as String?,
-                        price: (p['price'] as num).toDouble(),
-                        onAddToCart: () {
-                          CartWishlistStore.instance.addToCart(p);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Added to cart')),
-                          );
-                        },
-                        onFavoriteTap: () {
-                          CartWishlistStore.instance.addToWishlist(p);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Added to wishlist')),
-                          );
-                        },
+                    if (products.isEmpty) {
+                      return const Center(child: Text('No products found'));
+                    }
+
+                    return ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: TSizes.md,
                       ),
+                      itemCount: products.length,
+                      itemBuilder: (context, index) {
+                        final p = products[index];
+
+                        return SizedBox(
+                          width: itemWidth,
+                          child: ProductCard(
+                            product: p,
+                            onAddToCart: () {
+                              CartWishlistStore.instance.addToCart(p);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Added to cart')),
+                              );
+                            },
+                            onFavoriteTap: () {
+                              CartWishlistStore.instance.addToWishlist(p);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Added to wishlist'),
+                                ),
+                              );
+                            },
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => ProductDetailsPage(
+                                    categoryName: category,
+                                    product: p,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      separatorBuilder: (_, __) =>
+                          const SizedBox(width: TSizes.sm),
                     );
                   },
-                  separatorBuilder: (_, __) => const SizedBox(width: TSizes.sm),
                 ),
               ),
             ],

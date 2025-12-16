@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:trendify/utils/constants/sizes.dart';
 import 'package:trendify/utils/constants/colors.dart';
+import 'package:trendify/features/shop/models/product.dart';
 
 class PlaceOrderPage extends StatelessWidget {
   const PlaceOrderPage({super.key});
@@ -9,7 +10,7 @@ class PlaceOrderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final args = Get.arguments as Map<String, dynamic>? ?? {};
-    final product = args['product'] as Map<String, dynamic>?;
+    final product = args['product'] as Product?;
     final category = args['category'] as String? ?? '';
 
     return Scaffold(
@@ -21,7 +22,7 @@ class PlaceOrderPage extends StatelessWidget {
           children: [
             if (product != null) ...[
               Text(
-                product['title'] ?? '',
+                product.title,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: TSizes.sm),

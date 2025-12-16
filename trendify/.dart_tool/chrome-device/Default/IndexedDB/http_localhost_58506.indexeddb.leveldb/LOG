@@ -1,0 +1,33 @@
+2025/12/13-23:27:10.944 11cc Reusing MANIFEST C:\Users\sunda\AppData\Local\Temp\flutter_tools.57ce029d\flutter_tools_chrome_device.d39aa357\Default\IndexedDB\http_localhost_58506.indexeddb.leveldb/MANIFEST-000001
+2025/12/13-23:27:10.949 11cc Recovering log #4
+2025/12/13-23:27:10.952 11cc Reusing old log C:\Users\sunda\AppData\Local\Temp\flutter_tools.57ce029d\flutter_tools_chrome_device.d39aa357\Default\IndexedDB\http_localhost_58506.indexeddb.leveldb/000004.log 
+2025/12/13-23:27:10.968 11cc Level-0 table #8: started
+2025/12/13-23:27:10.974 11cc Level-0 table #8: 4772 bytes OK
+2025/12/13-23:27:10.978 11cc Delete type=0 #4
+2025/12/13-23:27:10.980 2d14 Manual compaction at level-0 from '\x00\x04\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x05\x00\x00\x00' @ 0 : 0; will stop at (end)
+2025/12/13-23:28:30.453 11cc Compacting 1@1 + 1@2 files
+2025/12/13-23:28:30.459 11cc Generated table #9@1: 41 keys, 3077 bytes
+2025/12/13-23:28:30.459 11cc Compacted 1@1 + 1@2 files => 3077 bytes
+2025/12/13-23:28:30.461 11cc compacted to: files[ 0 0 1 0 0 0 0 ]
+2025/12/13-23:28:30.462 11cc Delete type=2 #5
+2025/12/13-23:28:30.463 11cc Delete type=2 #8
+2025/12/13-23:29:50.557 3004 Level-0 table #11: started
+2025/12/13-23:29:50.561 3004 Level-0 table #11: 6456 bytes OK
+2025/12/13-23:29:50.565 3004 Delete type=0 #7
+2025/12/13-23:29:50.566 2d14 Manual compaction at level-0 from '\x00\x05\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x06\x00\x00\x00' @ 0 : 0; will stop at (end)
+2025/12/13-23:30:31.792 11cc Compacting 1@1 + 1@2 files
+2025/12/13-23:30:31.796 11cc Generated table #12@1: 41 keys, 3080 bytes
+2025/12/13-23:30:31.797 11cc Compacted 1@1 + 1@2 files => 3080 bytes
+2025/12/13-23:30:31.799 11cc compacted to: files[ 0 0 1 0 0 0 0 ]
+2025/12/13-23:30:31.801 11cc Delete type=2 #9
+2025/12/13-23:30:31.801 11cc Delete type=2 #11
+2025/12/13-23:32:26.374 11cc Level-0 table #14: started
+2025/12/13-23:32:26.377 11cc Level-0 table #14: 11654 bytes OK
+2025/12/13-23:32:26.380 11cc Delete type=0 #10
+2025/12/13-23:32:26.381 11cc Manual compaction at level-0 from '\x00\x06\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x07\x00\x00\x00' @ 0 : 0; will stop at (end)
+2025/12/13-23:33:10.188 11cc Compacting 1@1 + 1@2 files
+2025/12/13-23:33:10.195 11cc Generated table #15@1: 40 keys, 3066 bytes
+2025/12/13-23:33:10.196 11cc Compacted 1@1 + 1@2 files => 3066 bytes
+2025/12/13-23:33:10.198 11cc compacted to: files[ 0 0 1 0 0 0 0 ]
+2025/12/13-23:33:10.201 11cc Delete type=2 #12
+2025/12/13-23:33:10.201 11cc Delete type=2 #14

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:trendify/features/shop/services/orders_store.dart';
+import 'package:trendify/features/shop/shop_services/orders_store.dart';
 import 'package:trendify/utils/constants/sizes.dart';
 
 class OrdersScreen extends StatelessWidget {

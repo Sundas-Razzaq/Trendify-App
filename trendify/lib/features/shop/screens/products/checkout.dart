@@ -3,7 +3,8 @@ import 'package:get/get.dart';
 import 'package:trendify/utils/constants/sizes.dart';
 import 'package:trendify/utils/constants/colors.dart';
 import 'package:trendify/features/shop/models/order.dart';
-import 'package:trendify/features/shop/services/orders_store.dart';
+import 'package:trendify/features/shop/models/product.dart';
+import 'package:trendify/features/shop/shop_services/orders_store.dart';
 import 'package:trendify/routes/app_routes.dart';
 
 class CheckoutPage extends StatelessWidget {
@@ -12,7 +13,7 @@ class CheckoutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final args = Get.arguments as Map<String, dynamic>? ?? {};
-    final product = args['product'] as Map<String, dynamic>?;
+    final product = args['product'] as Product?;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Checkout')),
@@ -23,7 +24,7 @@ class CheckoutPage extends StatelessWidget {
           children: [
             if (product != null) ...[
               Text(
-                'Purchasing: ${product['title'] ?? ''}',
+                'Purchasing: ${product.title}',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: TSizes.md),
@@ -41,8 +42,8 @@ class CheckoutPage extends StatelessWidget {
                   final items = <Map<String, dynamic>>[];
                   double total = 0.0;
                   if (product != null) {
-                    items.add(Map<String, dynamic>.from(product));
-                    total = (product['price'] ?? 0) as double;
+                    items.add(product.toMap());
+                    total = product.price;
                   }
 
                   final order = Order(

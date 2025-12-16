@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:trendify/utils/constants/sizes.dart';
 import 'package:trendify/utils/constants/colors.dart';
+import 'package:trendify/features/shop/models/product.dart';
 
 class ProductCard extends StatelessWidget {
-  final String imagePath;
-  final String title;
-  final String? subtitle;
-  final double price;
-  final double? oldPrice;
-  final double? rating;
-  final int? reviewsCount;
+  final Product product;
   final bool isFavorite;
   final VoidCallback? onFavoriteTap;
   final VoidCallback? onAddToCart;
@@ -18,13 +13,7 @@ class ProductCard extends StatelessWidget {
 
   const ProductCard({
     super.key,
-    required this.imagePath,
-    required this.title,
-    this.subtitle,
-    required this.price,
-    this.oldPrice,
-    this.rating,
-    this.reviewsCount,
+    required this.product,
     this.isFavorite = false,
     this.onFavoriteTap,
     this.onAddToCart,
@@ -35,8 +24,7 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    // Use Material + InkWell so the card gets proper ink splash on tap and
-    // ensures a Material ancestor for descendant material widgets.
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -60,25 +48,55 @@ class ProductCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Image with optional favorite button overlay
+              /// IMAGE + FAVORITE
               Stack(
                 children: [
-                  // Image
                   AspectRatio(
                     aspectRatio: 3 / 2,
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(TSizes.cardRadiusMd),
-                        topRight: Radius.circular(TSizes.cardRadiusMd),
-                      ),
-                      child: Image.asset(
-                        imagePath,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          // ignore: avoid_print
-                          print(
-                            'ProductCard: failed to load $imagePath -> $error',
+                    child: Builder(
+                      builder: (context) {
+                        final img = product.image;
+                        if (img.startsWith('http')) {
+                          return Image.network(
+                            img,
+                            fit: BoxFit.cover,
+                            loadingBuilder: (context, child, progress) {
+                              if (progress == null) return child;
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            },
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                color: TColors.softGrey,
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.broken_image,
+                                    color: Colors.white70,
+                                  ),
+                                ),
+                              );
+                            },
                           );
+                        }
+
+                        // Fallback to asset if path exists, otherwise placeholder
+                        try {
+                          return Image.asset(
+                            img,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                Container(
+                                  color: TColors.softGrey,
+                                  child: const Center(
+                                    child: Icon(
+                                      Icons.image_not_supported,
+                                      color: Colors.white70,
+                                    ),
+                                  ),
+                                ),
+                          );
+                        } catch (_) {
                           return Container(
                             color: TColors.softGrey,
                             child: const Center(
@@ -88,15 +106,14 @@ class ProductCard extends StatelessWidget {
                               ),
                             ),
                           );
-                        },
-                      ),
+                        }
+                      },
                     ),
                   ),
 
-                  // Favorite button
                   Positioned(
-                    right: TSizes.sm,
                     top: TSizes.sm,
+                    right: TSizes.sm,
                     child: Material(
                       color: Colors.black26,
                       shape: const CircleBorder(),
@@ -104,7 +121,7 @@ class ProductCard extends StatelessWidget {
                         customBorder: const CircleBorder(),
                         onTap: onFavoriteTap,
                         child: Padding(
-                          padding: const EdgeInsets.all(6.0),
+                          padding: const EdgeInsets.all(6),
                           child: Icon(
                             isFavorite ? Icons.favorite : Icons.favorite_border,
                             color: isFavorite ? TColors.primary : Colors.white,
@@ -117,28 +134,29 @@ class ProductCard extends StatelessWidget {
                 ],
               ),
 
-              // Content
+              /// CONTENT
               Padding(
                 padding: const EdgeInsets.all(TSizes.sm),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Title
+                    /// TITLE
                     Text(
-                      title,
+                      product.title,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        fontSize: TSizes.fontSizeMd,
                         fontWeight: FontWeight.w600,
+                        fontSize: TSizes.fontSizeMd,
                         color: TColors.textprimary,
                       ),
                     ),
 
-                    if (subtitle != null) ...[
+                    /// SUBTITLE
+                    if (product.subtitle != null) ...[
                       const SizedBox(height: TSizes.xs),
                       Text(
-                        subtitle!,
+                        product.subtitle!,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: theme.textTheme.bodySmall?.copyWith(
@@ -149,22 +167,19 @@ class ProductCard extends StatelessWidget {
 
                     const SizedBox(height: TSizes.sm),
 
-                    // Price and old price
+                    /// PRICE
                     Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          '\$${price.toStringAsFixed(2)}',
+                          '\$${product.price.toStringAsFixed(2)}',
                           style: theme.textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.bold,
-                            fontSize: TSizes.fontSizeMd,
-                            color: TColors.textprimary,
                           ),
                         ),
                         const SizedBox(width: TSizes.sm),
-                        if (oldPrice != null)
+                        if (product.oldPrice != null)
                           Text(
-                            '\$${oldPrice!.toStringAsFixed(2)}',
+                            '\$${product.oldPrice!.toStringAsFixed(2)}',
                             style: theme.textTheme.bodySmall?.copyWith(
                               decoration: TextDecoration.lineThrough,
                               color: TColors.darkGrey,
@@ -175,37 +190,35 @@ class ProductCard extends StatelessWidget {
 
                     const SizedBox(height: TSizes.sm),
 
-                    // Rating and reviews
-                    if (rating != null || reviewsCount != null)
+                    /// RATING
+                    if (product.rating != null)
                       Row(
                         children: [
-                          if (rating != null) ...[
-                            const Icon(
-                              Icons.star,
+                          // show up to 5 stars filled according to rating
+                          ...List.generate(5, (i) {
+                            final filled = (product.rating ?? 0) >= (i + 1);
+                            return Icon(
+                              filled ? Icons.star : Icons.star_border,
                               size: 16,
                               color: Colors.amber,
-                            ),
-                            const SizedBox(width: TSizes.xs),
+                            );
+                          }),
+                          const SizedBox(width: TSizes.xs),
+                          Text(
+                            product.rating!.toStringAsFixed(1),
+                            style: theme.textTheme.bodySmall,
+                          ),
+                          if (product.reviews != null)
                             Text(
-                              rating!.toStringAsFixed(1),
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                          if (reviewsCount != null) ...[
-                            const SizedBox(width: TSizes.xs),
-                            Text(
-                              '(${reviewsCount.toString()})',
+                              ' (${product.reviews})',
                               style: theme.textTheme.bodySmall,
                             ),
-                          ],
                         ],
                       ),
 
                     const SizedBox(height: TSizes.sm),
 
-                    // Add to cart button
+                    /// ADD TO CART
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton.icon(
@@ -213,17 +226,14 @@ class ProductCard extends StatelessWidget {
                         icon: const Icon(Icons.add_shopping_cart),
                         label: const Text('Add to Cart'),
                         style: ElevatedButton.styleFrom(
+                          backgroundColor: TColors.primary,
                           padding: const EdgeInsets.symmetric(
                             vertical: TSizes.sm,
                           ),
-                          backgroundColor: TColors.primary,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                               TSizes.buttonRadius,
                             ),
-                          ),
-                          textStyle: const TextStyle(
-                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),

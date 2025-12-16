@@ -10,12 +10,12 @@ class CategorySection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final categories = [
-      {'label': 'Beauty', 'image': TImages.categoryImage1},
-      {'label': 'Fashion', 'image': TImages.categoryImage2},
-      {'label': 'Kids', 'image': TImages.categoryImage3},
-      {'label': 'Home', 'image': TImages.categoryImage4},
-      {'label': 'Women', 'image': TImages.categoryImage5},
-      {'label': 'Mens', 'image': TImages.categoryImage6},
+      {'label': 'Beauty', 'value': 'beauty', 'image': TImages.categoryImage1},
+      {'label': 'Fashion', 'value': 'fashion', 'image': TImages.categoryImage2},
+      {'label': 'Kids', 'value': 'kids', 'image': TImages.categoryImage3},
+      {'label': 'Home', 'value': 'home', 'image': TImages.categoryImage4},
+      {'label': 'Women', 'value': 'women', 'image': TImages.categoryImage5},
+      {'label': 'Men', 'value': 'men', 'image': TImages.categoryImage6},
     ];
 
     return Column(
@@ -102,8 +102,10 @@ class CategorySection extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          CategoryScreen(categoryName: cat['label'] as String),
+                      builder: (context) => CategoryScreen(
+                        categoryLabel: cat['label'] as String,
+                        categoryValue: cat['value'] as String,
+                      ),
                     ),
                   );
                 },

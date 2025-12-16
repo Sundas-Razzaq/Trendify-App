@@ -5,22 +5,28 @@ import 'package:trendify/common/widgets/navigation/trendy_bottom_nav.dart';
 import 'package:trendify/features/shop/screens/main_screen.dart';
 import 'package:trendify/features/shop/screens/products/product_card.dart';
 import 'package:trendify/features/shop/screens/products/product_details.dart';
-import 'package:trendify/features/shop/services/cart_wishlist_store.dart';
-import 'package:trendify/features/shop/screens/products/product_data.dart';
+import 'package:trendify/features/shop/shop_services/cart_wishlist_store.dart';
+// import 'package:trendify/features/shop/screens/products/product_data.dart';
+import 'package:trendify/utils/services/product_service.dart';
+import 'package:trendify/features/shop/models/product.dart';
 
 class CategoryScreen extends StatelessWidget {
-  final String categoryName;
-  const CategoryScreen({super.key, required this.categoryName});
+  final String categoryLabel;
+  final String categoryValue;
+  const CategoryScreen({
+    super.key,
+    required this.categoryLabel,
+    required this.categoryValue,
+  });
 
   @override
   Widget build(BuildContext context) {
-    // Products are loaded from product_data.dart via `categoryProducts` map.
-    final products = categoryProducts[categoryName] ?? <Map<String, dynamic>>[];
+    final productService = ProductService();
 
     return Scaffold(
       appBar: AppBar(
         leading: const BackButton(),
-        title: Text(categoryName),
+        title: Text(categoryLabel),
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: TColors.textprimary,
@@ -36,7 +42,7 @@ class CategoryScreen extends StatelessWidget {
             // Search bar
             TextField(
               decoration: InputDecoration(
-                hintText: 'Search in $categoryName',
+                hintText: 'Search in $categoryLabel',
                 prefixIcon: const Icon(Icons.search),
                 contentPadding: const EdgeInsets.symmetric(
                   vertical: 0,
@@ -78,75 +84,82 @@ class CategoryScreen extends StatelessWidget {
 
             // Grid of products
             Expanded(
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final width = constraints.maxWidth;
-                  int crossAxisCount = 2;
-                  if (width > 1200) {
-                    crossAxisCount = 5;
-                  } else if (width > 900) {
-                    crossAxisCount = 4;
-                  } else if (width > 600) {
-                    crossAxisCount = 3;
+              child: StreamBuilder<List<Product>>(
+                stream: productService.getProductsByCategory(
+                  categoryValue.toLowerCase(),
+                ),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  final products = snapshot.data ?? <Product>[];
+
+                  if (products.isEmpty) {
+                    return const Center(child: Text('No products found'));
                   }
 
-                  final horizontalPadding = TSizes.md * 2;
-                  final cardWidth =
-                      (width -
-                          (crossAxisCount - 1) * TSizes.gridViewSpacing -
-                          horizontalPadding) /
-                      crossAxisCount;
-                  final childAspectRatio = cardWidth / (cardWidth * 1.6);
+                  return LayoutBuilder(
+                    builder: (context, constraints) {
+                      final width = constraints.maxWidth;
+                      int crossAxisCount = 2;
+                      if (width > 1200) {
+                        crossAxisCount = 5;
+                      } else if (width > 900) {
+                        crossAxisCount = 4;
+                      } else if (width > 600) {
+                        crossAxisCount = 3;
+                      }
 
-                  return GridView.builder(
-                    itemCount: products.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: crossAxisCount,
-                      mainAxisSpacing: TSizes.gridViewSpacing,
-                      crossAxisSpacing: TSizes.gridViewSpacing,
-                      childAspectRatio: childAspectRatio,
-                    ),
-                    itemBuilder: (context, index) {
-                      final p = products[index];
-                      return ProductCard(
-                        imagePath: p['image'] as String,
-                        title: p['title'] as String,
-                        subtitle: p['subtitle'] as String?,
-                        price: (p['price'] as num).toDouble(),
-                        oldPrice: p['oldPrice'] != null
-                            ? (p['oldPrice'] as num).toDouble()
-                            : null,
-                        rating: p['rating'] != null
-                            ? (p['rating'] as num).toDouble()
-                            : null,
-                        reviewsCount: p['reviews'] as int?,
-                        onTap: () {
-                          // Navigate to details page with product data
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => ProductDetailsPage(
-                                categoryName: categoryName,
-                                product: p,
-                              ),
-                            ),
+                      final horizontalPadding = TSizes.md * 2;
+                      final cardWidth =
+                          (width -
+                              (crossAxisCount - 1) * TSizes.gridViewSpacing -
+                              horizontalPadding) /
+                          crossAxisCount;
+                      final childAspectRatio = cardWidth / (cardWidth * 1.6);
+
+                      return GridView.builder(
+                        itemCount: products.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: crossAxisCount,
+                          mainAxisSpacing: TSizes.gridViewSpacing,
+                          crossAxisSpacing: TSizes.gridViewSpacing,
+                          childAspectRatio: childAspectRatio,
+                        ),
+                        itemBuilder: (context, index) {
+                          final p = products[index];
+                          return ProductCard(
+                            product: p,
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => ProductDetailsPage(
+                                    categoryName: categoryLabel,
+                                    product: p,
+                                  ),
+                                ),
+                              );
+                            },
+                            onFavoriteTap: () {
+                              CartWishlistStore.instance.addToWishlist(p);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Added to wishlist'),
+                                ),
+                              );
+                            },
+                            onAddToCart: () {
+                              CartWishlistStore.instance.addToCart(p);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Added to cart')),
+                              );
+                            },
                           );
                         },
-                        onFavoriteTap: () {
-                          CartWishlistStore.instance.addToWishlist(p);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Added to wishlist')),
-                          );
-                        },
-                        onAddToCart: () {
-                          CartWishlistStore.instance.addToCart(p);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Added to cart')),
-                          );
-                        },
+                        padding: const EdgeInsets.only(bottom: TSizes.md),
                       );
                     },
-                    padding: const EdgeInsets.only(bottom: TSizes.md),
                   );
                 },
               ),

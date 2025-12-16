@@ -122,6 +122,12 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "file_picker",
+      "rootUri": "file:///C:/Users/sunda/AppData/Local/Pub/Cache/hosted/pub.dev/file_picker-5.5.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "file_selector_linux",
       "rootUri": "file:///C:/Users/sunda/AppData/Local/Pub/Cache/hosted/pub.dev/file_selector_linux-0.9.3+2",
       "packageUri": "lib/",
@@ -200,6 +206,24 @@
       "languageVersion": "3.2"
     },
     {
+      "name": "firebase_storage",
+      "rootUri": "file:///C:/Users/sunda/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_storage-11.7.7",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "firebase_storage_platform_interface",
+      "rootUri": "file:///C:/Users/sunda/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_storage_platform_interface-5.1.22",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "firebase_storage_web",
+      "rootUri": "file:///C:/Users/sunda/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_storage_web-3.9.7",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
       "name": "flutter",
       "rootUri": "file:///D:/Setups/flutter/packages/flutter",
       "packageUri": "lib/",
@@ -240,6 +264,12 @@
       "rootUri": "file:///C:/Users/sunda/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.32",
       "packageUri": "lib/",
       "languageVersion": "3.9"
+    },
+    {
+      "name": "flutter_rating_bar",
+      "rootUri": "file:///C:/Users/sunda/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_rating_bar-4.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
     },
     {
       "name": "flutter_test",
@@ -696,6 +726,12 @@
       "rootUri": "file:///C:/Users/sunda/AppData/Local/Pub/Cache/hosted/pub.dev/web-0.5.1",
       "packageUri": "lib/",
       "languageVersion": "3.3"
+    },
+    {
+      "name": "win32",
+      "rootUri": "file:///C:/Users/sunda/AppData/Local/Pub/Cache/hosted/pub.dev/win32-5.15.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.8"
     },
     {
       "name": "xdg_directories",

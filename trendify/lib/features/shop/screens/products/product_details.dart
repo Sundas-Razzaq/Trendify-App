@@ -3,12 +3,13 @@ import 'package:get/get.dart';
 import 'package:trendify/utils/constants/sizes.dart';
 import 'package:trendify/utils/constants/colors.dart';
 import 'package:trendify/common/widgets/navigation/trendy_bottom_nav.dart';
-import 'package:trendify/features/shop/services/cart_wishlist_store.dart';
+import 'package:trendify/features/shop/shop_services/cart_wishlist_store.dart';
+import 'package:trendify/features/shop/models/product.dart';
 // import 'package:trendify/features/shop/screens/products/product_card.dart';
 
 class ProductDetailsPage extends StatelessWidget {
   final String categoryName;
-  final Map<String, dynamic> product;
+  final Product product;
 
   const ProductDetailsPage({
     super.key,
@@ -22,7 +23,7 @@ class ProductDetailsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: const BackButton(),
-        title: Text(product['title'] ?? 'Product'),
+        title: Text(product.title),
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: TColors.textprimary,
@@ -47,7 +48,7 @@ class ProductDetailsPage extends StatelessWidget {
               child: AspectRatio(
                 aspectRatio: 16 / 9,
                 child: Image.asset(
-                  product['image'] as String,
+                  product.image,
                   width: double.infinity,
                   fit: BoxFit.cover,
                   errorBuilder: (c, e, st) => Container(
@@ -62,14 +63,14 @@ class ProductDetailsPage extends StatelessWidget {
 
             // Title and subtitle
             Text(
-              product['title'] ?? '',
+              product.title,
               style: theme.textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
-            if (product['subtitle'] != null) ...[
+            if (product.subtitle != null) ...[
               const SizedBox(height: TSizes.xs),
-              Text(product['subtitle'], style: theme.textTheme.bodyMedium),
+              Text(product.subtitle!, style: theme.textTheme.bodyMedium),
             ],
 
             const SizedBox(height: TSizes.sm),
@@ -78,15 +79,15 @@ class ProductDetailsPage extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  '\$${(product['price'] as num).toDouble().toStringAsFixed(2)}',
+                  '\$${product.price.toDouble().toStringAsFixed(2)}',
                   style: theme.textTheme.headlineSmall?.copyWith(
                     color: TColors.primary,
                   ),
                 ),
                 const SizedBox(width: TSizes.sm),
-                if (product['oldPrice'] != null)
+                if (product.oldPrice != null)
                   Text(
-                    '\$${(product['oldPrice'] as num).toDouble().toStringAsFixed(2)}',
+                    '\$${product.oldPrice!.toDouble().toStringAsFixed(2)}',
                     style: theme.textTheme.bodyMedium?.copyWith(
                       decoration: TextDecoration.lineThrough,
                     ),
@@ -155,7 +156,8 @@ class ProductDetailsPage extends StatelessWidget {
             Text('Product Details', style: theme.textTheme.titleMedium),
             const SizedBox(height: TSizes.xs),
             Text(
-              'This is a demo product description. Replace with real product details from your backend or data model.',
+              product.description ??
+                  'This is a demo product description. Replace with real product details from your backend or data model.',
               style: theme.textTheme.bodyMedium,
             ),
 

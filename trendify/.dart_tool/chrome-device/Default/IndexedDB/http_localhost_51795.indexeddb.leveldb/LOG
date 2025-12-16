@@ -1,0 +1,26 @@
+2025/12/16-18:52:19.286 19e0 Creating DB C:\Users\sunda\AppData\Local\Temp\flutter_tools.cade71e2\flutter_tools_chrome_device.11c7f40b\Default\IndexedDB\http_localhost_51795.indexeddb.leveldb since it was missing.
+2025/12/16-18:52:19.294 19e0 Reusing MANIFEST C:\Users\sunda\AppData\Local\Temp\flutter_tools.cade71e2\flutter_tools_chrome_device.11c7f40b\Default\IndexedDB\http_localhost_51795.indexeddb.leveldb/MANIFEST-000001
+2025/12/16-18:52:19.310 2b04 Level-0 table #5: started
+2025/12/16-18:52:19.313 2b04 Level-0 table #5: 1311 bytes OK
+2025/12/16-18:52:19.316 2b04 Delete type=0 #3
+2025/12/16-18:52:19.317 19e0 Manual compaction at level-0 from '\x00\x01\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x02\x00\x00\x00' @ 0 : 0; will stop at (end)
+2025/12/16-18:52:49.952 19c8 Level-0 table #7: started
+2025/12/16-18:52:49.955 19c8 Level-0 table #7: 1954 bytes OK
+2025/12/16-18:52:49.959 19c8 Delete type=0 #4
+2025/12/16-18:52:49.959 19c8 Manual compaction at level-0 from '\x00\x04\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x05\x00\x00\x00' @ 0 : 0; will stop at (end)
+2025/12/16-18:53:37.177 19e0 Compacting 1@1 + 1@2 files
+2025/12/16-18:53:37.181 19e0 Generated table #8@1: 39 keys, 1352 bytes
+2025/12/16-18:53:37.182 19e0 Compacted 1@1 + 1@2 files => 1352 bytes
+2025/12/16-18:53:37.184 19e0 compacted to: files[ 0 0 1 0 0 0 0 ]
+2025/12/16-18:53:37.187 19e0 Delete type=2 #5
+2025/12/16-18:53:37.187 19e0 Delete type=2 #7
+2025/12/16-19:10:22.097 19e0 Level-0 table #10: started
+2025/12/16-19:10:22.103 19e0 Level-0 table #10: 12222 bytes OK
+2025/12/16-19:10:22.107 19e0 Delete type=0 #6
+2025/12/16-19:10:22.108 19c8 Manual compaction at level-0 from '\x00\x05\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x06\x00\x00\x00' @ 0 : 0; will stop at (end)
+2025/12/16-19:11:00.922 19e0 Compacting 1@1 + 1@2 files
+2025/12/16-19:11:00.925 19e0 Generated table #11@1: 40 keys, 3066 bytes
+2025/12/16-19:11:00.926 19e0 Compacted 1@1 + 1@2 files => 3066 bytes
+2025/12/16-19:11:00.928 19e0 compacted to: files[ 0 0 1 0 0 0 0 ]
+2025/12/16-19:11:00.929 19e0 Delete type=2 #8
+2025/12/16-19:11:00.930 19e0 Delete type=2 #10

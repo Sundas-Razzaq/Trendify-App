@@ -38,6 +38,9 @@ dependencies:
   provider: ^6.1.5
   cloud_firestore: ^4.15.2
   firebase_messaging: ^14.7.0
+  firebase_storage: ^11.1.0
+  file_picker: ^5.4.0
+  flutter_rating_bar: ^4.0.0
   
   # Add this for web notifications:
   flutter_local_notifications: ^16.1.0  # Works partially on web
