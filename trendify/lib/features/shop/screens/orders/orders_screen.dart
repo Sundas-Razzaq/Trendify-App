@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:trendify/features/shop/shop_services/orders_store.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:trendify/features/shop/models/order.dart';
+import 'package:trendify/utils/services/order_service.dart';
 import 'package:trendify/utils/constants/sizes.dart';
 
 class OrdersScreen extends StatelessWidget {
@@ -8,13 +10,27 @@ class OrdersScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final store = OrdersStore();
+    final buyerId = FirebaseAuth.instance.currentUser?.uid;
 
     return Scaffold(
       appBar: AppBar(title: const Text('My Orders')),
-      body: ValueListenableBuilder(
-        valueListenable: store.orders,
-        builder: (context, List orders, _) {
+      body: StreamBuilder<List<Order>>(
+        stream: OrderService().getOrdersForCurrentBuyer(buyerId),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                'Error loading orders: ${snapshot.error}',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+            );
+          }
+
+          final orders = snapshot.data ?? [];
           if (orders.isEmpty) {
             return Center(
               child: Text(
@@ -54,9 +70,32 @@ class OrdersScreen extends StatelessWidget {
                       const SizedBox(height: TSizes.sm),
                       Text(date, style: Theme.of(context).textTheme.bodySmall),
                       const SizedBox(height: TSizes.sm),
-                      Text(
-                        '${order.items.length} items',
-                        style: Theme.of(context).textTheme.bodyMedium,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '${order.items.length} items',
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: _getStatusColor(order.status),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              _getStatusText(order.status),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: TSizes.sm),
                       ExpansionTile(
@@ -79,5 +118,27 @@ class OrdersScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  String _getStatusText(status) {
+    final statusStr = status.toString().split('.').last;
+    return statusStr[0].toUpperCase() + statusStr.substring(1);
+  }
+
+  Color _getStatusColor(status) {
+    final statusStr = status.toString().split('.').last;
+    switch (statusStr) {
+      case 'preprocessing':
+        return Colors.orange;
+      case 'shipped':
+        return Colors.blue;
+      case 'delivered':
+      case 'completed':
+        return Colors.green;
+      case 'cancelled':
+        return Colors.red;
+      default:
+        return Colors.grey;
+    }
   }
 }

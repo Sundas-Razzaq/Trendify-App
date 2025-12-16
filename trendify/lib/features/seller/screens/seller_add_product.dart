@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:trendify/features/shop/models/product.dart';
 import 'package:trendify/utils/services/product_service.dart';
 
@@ -21,16 +22,17 @@ class _SellerAddProductState extends State<SellerAddProduct> {
   late final TextEditingController _titleController;
   late final TextEditingController _subtitleController;
   late final TextEditingController _descriptionController;
-  late final TextEditingController _imageController;
   late final TextEditingController _priceController;
   late final TextEditingController _oldPriceController;
   late final TextEditingController _reviewsController;
 
   Uint8List? _pickedImageBytes;
+  String? _pickedImageName;
   String? _uploadedImageUrl;
+
+  bool _isSubmitting = false;
   double _rating = 0.0;
   String? _selectedCategory;
-  bool _isSubmitting = false;
 
   final List<Map<String, String>> _categories = [
     {'label': 'Men', 'value': 'men'},
@@ -50,7 +52,6 @@ class _SellerAddProductState extends State<SellerAddProduct> {
     _titleController = TextEditingController(text: p?.title ?? '');
     _subtitleController = TextEditingController(text: p?.subtitle ?? '');
     _descriptionController = TextEditingController(text: p?.description ?? '');
-    _imageController = TextEditingController();
     _priceController = TextEditingController(
       text: p != null ? p.price.toString() : '',
     );
@@ -71,7 +72,6 @@ class _SellerAddProductState extends State<SellerAddProduct> {
     _titleController.dispose();
     _subtitleController.dispose();
     _descriptionController.dispose();
-    _imageController.dispose();
     _priceController.dispose();
     _oldPriceController.dispose();
     _reviewsController.dispose();
@@ -85,8 +85,10 @@ class _SellerAddProductState extends State<SellerAddProduct> {
     );
 
     if (result != null && result.files.isNotEmpty) {
+      final file = result.files.first;
       setState(() {
-        _pickedImageBytes = result.files.first.bytes;
+        _pickedImageBytes = file.bytes;
+        _pickedImageName = file.name;
       });
     }
   }
@@ -94,38 +96,45 @@ class _SellerAddProductState extends State<SellerAddProduct> {
   Future<String?> _uploadImage() async {
     if (_pickedImageBytes == null) return _uploadedImageUrl;
 
-    final ref = FirebaseStorage.instance.ref().child(
-      'products/${DateTime.now().millisecondsSinceEpoch}.jpg',
-    );
+    try {
+      final ref = FirebaseStorage.instance.ref(
+        'products/${DateTime.now().millisecondsSinceEpoch}_${_pickedImageName ?? 'image'}.jpg',
+      );
 
-    await ref.putData(_pickedImageBytes!);
-    final url = await ref.getDownloadURL();
+      final task = ref.putData(
+        _pickedImageBytes!,
+        SettableMetadata(contentType: 'image/jpeg'),
+      );
 
-    setState(() {
-      _uploadedImageUrl = url;
-    });
+      final snapshot = await task
+          .whenComplete(() {})
+          .timeout(
+            const Duration(seconds: 25),
+            onTimeout: () => throw Exception('Image upload timeout'),
+          );
 
-    return url;
+      final url = await snapshot.ref.getDownloadURL();
+      _pickedImageBytes = null;
+      return url;
+    } catch (e) {
+      debugPrint('Image upload failed: $e');
+      return null; // ❗ DO NOT block product creation
+    }
   }
 
   Future<void> _submit() async {
     if (_isSubmitting) return;
-
     if (!_formKey.currentState!.validate()) return;
 
-    setState(() {
-      _isSubmitting = true;
-    });
+    setState(() => _isSubmitting = true);
 
     try {
       final imageUrl = await _uploadImage();
 
-      if (imageUrl == null || imageUrl.isEmpty) {
-        throw Exception('Image upload failed');
-      }
-
       final product = Product(
         id: widget.product?.id,
+        sellerId:
+            widget.product?.sellerId ?? FirebaseAuth.instance.currentUser?.uid,
         title: _titleController.text.trim(),
         subtitle: _subtitleController.text.trim().isEmpty
             ? null
@@ -133,42 +142,41 @@ class _SellerAddProductState extends State<SellerAddProduct> {
         description: _descriptionController.text.trim().isEmpty
             ? null
             : _descriptionController.text.trim(),
-        image: imageUrl,
+        image: imageUrl ?? '',
         category: _selectedCategory!,
-        price: double.parse(_priceController.text.trim()),
-        oldPrice: _oldPriceController.text.trim().isEmpty
+        price: double.parse(_priceController.text),
+        oldPrice: _oldPriceController.text.isEmpty
             ? null
-            : double.parse(_oldPriceController.text.trim()),
+            : double.parse(_oldPriceController.text),
         rating: _rating,
-        reviews: _reviewsController.text.trim().isEmpty
+        reviews: _reviewsController.text.isEmpty
             ? null
-            : int.parse(_reviewsController.text.trim()),
+            : int.parse(_reviewsController.text),
       );
 
-      if (product.id != null && product.id!.isNotEmpty) {
-        await _productService.updateProduct(product);
-      } else {
+      if (product.id == null) {
         await _productService.addProduct(product);
+      } else {
+        await _productService.updateProduct(product);
       }
 
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Product saved successfully')),
-        );
-        Navigator.pop(context);
-      }
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Product saved successfully')),
+      );
+
+      // Safely attempt to pop the current route if possible. `maybePop`
+      // will do nothing if there's no route to pop (prevents assertion).
+      Navigator.maybePop(context);
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('Error: $e')));
+        ).showSnackBar(SnackBar(content: Text('Failed: $e')));
       }
     } finally {
-      if (mounted) {
-        setState(() {
-          _isSubmitting = false;
-        });
-      }
+      if (mounted) setState(() => _isSubmitting = false);
     }
   }
 
@@ -191,17 +199,6 @@ class _SellerAddProductState extends State<SellerAddProduct> {
                     v == null || v.isEmpty ? 'Title required' : null,
               ),
               const SizedBox(height: 8),
-              TextFormField(
-                controller: _subtitleController,
-                decoration: const InputDecoration(labelText: 'Subtitle'),
-              ),
-              const SizedBox(height: 8),
-              TextFormField(
-                controller: _descriptionController,
-                maxLines: 4,
-                decoration: const InputDecoration(labelText: 'Description'),
-              ),
-              const SizedBox(height: 8),
               DropdownButtonFormField<String>(
                 value: _selectedCategory,
                 decoration: const InputDecoration(labelText: 'Category'),
@@ -214,8 +211,6 @@ class _SellerAddProductState extends State<SellerAddProduct> {
                     )
                     .toList(),
                 onChanged: (v) => setState(() => _selectedCategory = v),
-                validator: (v) =>
-                    v == null || v.isEmpty ? 'Category required' : null,
               ),
               const SizedBox(height: 12),
               ElevatedButton.icon(
@@ -226,9 +221,10 @@ class _SellerAddProductState extends State<SellerAddProduct> {
               const SizedBox(height: 12),
               if (_pickedImageBytes != null)
                 Image.memory(_pickedImageBytes!, height: 160)
-              else if (_uploadedImageUrl != null)
+              else if (_uploadedImageUrl != null &&
+                  _uploadedImageUrl!.isNotEmpty)
                 Image.network(_uploadedImageUrl!, height: 160),
-              const SizedBox(height: 8),
+              const SizedBox(height: 12),
               TextFormField(
                 controller: _priceController,
                 decoration: const InputDecoration(labelText: 'Price'),
@@ -236,21 +232,8 @@ class _SellerAddProductState extends State<SellerAddProduct> {
                   decimal: true,
                 ),
                 validator: (v) => v == null || double.tryParse(v) == null
-                    ? 'Valid price required'
+                    ? 'Invalid price'
                     : null,
-              ),
-              const SizedBox(height: 8),
-              Row(
-                children: List.generate(5, (i) {
-                  final idx = i + 1;
-                  return IconButton(
-                    onPressed: () => setState(() => _rating = idx.toDouble()),
-                    icon: Icon(
-                      idx <= _rating ? Icons.star : Icons.star_border,
-                      color: Colors.amber,
-                    ),
-                  );
-                }),
               ),
               const SizedBox(height: 16),
               SizedBox(
@@ -258,11 +241,7 @@ class _SellerAddProductState extends State<SellerAddProduct> {
                 child: ElevatedButton(
                   onPressed: _isSubmitting ? null : _submit,
                   child: _isSubmitting
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
+                      ? const CircularProgressIndicator()
                       : Text(isEdit ? 'Update Product' : 'Add Product'),
                 ),
               ),
