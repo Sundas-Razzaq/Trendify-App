@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:trendify/features/shop/models/order.dart' as app_order;
 
 class OrderService {
@@ -30,16 +31,29 @@ class OrderService {
 
   /// Stream orders for a given sellerId. Returns an empty list if there
   /// are no orders. Orders are sorted by `createdAt` descending.
+  /// Uses in-memory sorting to avoid requiring a composite index.
   Stream<List<app_order.Order>> getOrdersForSeller(String sellerId) {
-    final query = _orders
-        .where('sellerId', isEqualTo: sellerId)
-        .orderBy('createdAt', descending: true);
+    debugPrint('OrderService.getOrdersForSeller called with: $sellerId');
+
+    final query = _orders.where('sellerId', isEqualTo: sellerId);
 
     return query.snapshots().map((snap) {
-      return snap.docs.map((d) {
-        final map = <String, dynamic>{...d.data(), 'id': d.id};
+      debugPrint('Firestore snapshot received: ${snap.docs.length} documents');
+
+      final orders = snap.docs.map((d) {
+        final data = d.data();
+        debugPrint(
+          'Document ${d.id}: sellerId=${data['sellerId']}, buyerId=${data['buyerId']}',
+        );
+
+        final map = <String, dynamic>{...data, 'id': d.id};
         return app_order.Order.fromMap(map);
       }).toList();
+
+      // Sort in-memory by date descending
+      orders.sort((a, b) => b.date.compareTo(a.date));
+      debugPrint('Returning ${orders.length} orders for seller');
+      return orders;
     });
   }
 
@@ -56,16 +70,19 @@ class OrderService {
 
   /// Stream orders for a given buyerId. Returns an empty list if there
   /// are no orders. Orders are sorted by `createdAt` descending.
+  /// Uses in-memory sorting to avoid requiring a composite index.
   Stream<List<app_order.Order>> getOrdersForBuyer(String buyerId) {
-    final query = _orders
-        .where('buyerId', isEqualTo: buyerId)
-        .orderBy('createdAt', descending: true);
+    final query = _orders.where('buyerId', isEqualTo: buyerId);
 
     return query.snapshots().map((snap) {
-      return snap.docs.map((d) {
+      final orders = snap.docs.map((d) {
         final map = <String, dynamic>{...d.data(), 'id': d.id};
         return app_order.Order.fromMap(map);
       }).toList();
+
+      // Sort in-memory by date descending
+      orders.sort((a, b) => b.date.compareTo(a.date));
+      return orders;
     });
   }
 

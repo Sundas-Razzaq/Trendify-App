@@ -183,66 +183,390 @@ class _SellerAddProductState extends State<SellerAddProduct> {
   @override
   Widget build(BuildContext context) {
     final isEdit = widget.product != null;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      appBar: AppBar(title: Text(isEdit ? 'Edit Product' : 'Add Product')),
+      appBar: AppBar(
+        title: Text(
+          isEdit ? 'Edit Product' : 'Add New Product',
+          style: const TextStyle(fontWeight: FontWeight.w600),
+        ),
+        centerTitle: true,
+        elevation: 0,
+      ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(20),
         child: Form(
           key: _formKey,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextFormField(
-                controller: _titleController,
-                decoration: const InputDecoration(labelText: 'Title'),
-                validator: (v) =>
-                    v == null || v.isEmpty ? 'Title required' : null,
-              ),
-              const SizedBox(height: 8),
-              DropdownButtonFormField<String>(
-                value: _selectedCategory,
-                decoration: const InputDecoration(labelText: 'Category'),
-                items: _categories
-                    .map(
-                      (c) => DropdownMenuItem(
-                        value: c['value'],
-                        child: Text(c['label']!),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (v) => setState(() => _selectedCategory = v),
-              ),
-              const SizedBox(height: 12),
-              ElevatedButton.icon(
-                onPressed: _pickImage,
-                icon: const Icon(Icons.image),
-                label: const Text('Choose Image'),
-              ),
-              const SizedBox(height: 12),
-              if (_pickedImageBytes != null)
-                Image.memory(_pickedImageBytes!, height: 160)
-              else if (_uploadedImageUrl != null &&
-                  _uploadedImageUrl!.isNotEmpty)
-                Image.network(_uploadedImageUrl!, height: 160),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: _priceController,
-                decoration: const InputDecoration(labelText: 'Price'),
-                keyboardType: const TextInputType.numberWithOptions(
-                  decimal: true,
+              // Product Image Section
+              Card(
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                validator: (v) => v == null || double.tryParse(v) == null
-                    ? 'Invalid price'
-                    : null,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Product Image',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Center(
+                        child: Column(
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              height: 180,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: colorScheme.surfaceVariant.withOpacity(
+                                  0.3,
+                                ),
+                                border: Border.all(
+                                  color: colorScheme.outline.withOpacity(0.3),
+                                ),
+                              ),
+                              child: _pickedImageBytes != null
+                                  ? ClipRRect(
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Image.memory(
+                                        _pickedImageBytes!,
+                                        fit: BoxFit.cover,
+                                        height: 160,
+                                      ),
+                                    )
+                                  : _uploadedImageUrl != null &&
+                                        _uploadedImageUrl!.isNotEmpty
+                                  ? ClipRRect(
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Image.network(
+                                        _uploadedImageUrl!,
+                                        fit: BoxFit.cover,
+                                        height: 160,
+                                      ),
+                                    )
+                                  : Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.image_outlined,
+                                          size: 48,
+                                          color: colorScheme.onSurface
+                                              .withOpacity(0.5),
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Text(
+                                          'No image selected',
+                                          style: TextStyle(
+                                            color: colorScheme.onSurface
+                                                .withOpacity(0.6),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                            ),
+                            const SizedBox(height: 16),
+                            ElevatedButton.icon(
+                              onPressed: _pickImage,
+                              icon: const Icon(Icons.cloud_upload_outlined),
+                              label: const Text('Upload Image'),
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 24,
+                                  vertical: 14,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              const SizedBox(height: 16),
+
+              const SizedBox(height: 24),
+
+              // Product Details Section
+              Card(
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Product Details',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Title Field
+                      TextFormField(
+                        controller: _titleController,
+                        decoration: InputDecoration(
+                          labelText: 'Product Title *',
+                          hintText: 'Enter product title',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          prefixIcon: const Icon(Icons.title),
+                          filled: true,
+                          fillColor: colorScheme.surfaceVariant.withOpacity(
+                            0.3,
+                          ),
+                        ),
+                        validator: (v) =>
+                            v == null || v.isEmpty ? 'Title required' : null,
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // Category Field
+                      DropdownButtonFormField<String>(
+                        value: _selectedCategory,
+                        decoration: InputDecoration(
+                          labelText: 'Category *',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          prefixIcon: const Icon(Icons.category),
+                          filled: true,
+                          fillColor: colorScheme.surfaceVariant.withOpacity(
+                            0.3,
+                          ),
+                        ),
+                        items: _categories
+                            .map(
+                              (c) => DropdownMenuItem(
+                                value: c['value'],
+                                child: Text(c['label']!),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (v) => setState(() => _selectedCategory = v),
+                        borderRadius: BorderRadius.circular(10),
+                        elevation: 4,
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // Subtitle Field
+                      TextFormField(
+                        controller: _subtitleController,
+                        decoration: InputDecoration(
+                          labelText: 'Subtitle',
+                          hintText: 'Enter product subtitle (optional)',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          prefixIcon: const Icon(Icons.subtitles),
+                          filled: true,
+                          fillColor: colorScheme.surfaceVariant.withOpacity(
+                            0.3,
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // Description Field
+                      TextFormField(
+                        controller: _descriptionController,
+                        maxLines: 3,
+                        decoration: InputDecoration(
+                          labelText: 'Description',
+                          hintText: 'Enter product description (optional)',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          alignLabelWithHint: true,
+                          prefixIcon: const Icon(Icons.description),
+                          filled: true,
+                          fillColor: colorScheme.surfaceVariant.withOpacity(
+                            0.3,
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // Price Fields Row
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: _priceController,
+                              decoration: InputDecoration(
+                                labelText: 'Price *',
+                                hintText: '0.00',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                prefixIcon: const Icon(Icons.attach_money),
+                                filled: true,
+                                fillColor: colorScheme.surfaceVariant
+                                    .withOpacity(0.3),
+                              ),
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                    decimal: true,
+                                  ),
+                              validator: (v) =>
+                                  v == null || double.tryParse(v) == null
+                                  ? 'Invalid price'
+                                  : null,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: TextFormField(
+                              controller: _oldPriceController,
+                              decoration: InputDecoration(
+                                labelText: 'Old Price',
+                                hintText: '0.00 (optional)',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                prefixIcon: const Icon(Icons.price_change),
+                                filled: true,
+                                fillColor: colorScheme.surfaceVariant
+                                    .withOpacity(0.3),
+                              ),
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                    decimal: true,
+                                  ),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // Rating & Reviews Row
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Rating: ${_rating.toStringAsFixed(1)}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Slider(
+                                  value: _rating,
+                                  min: 0,
+                                  max: 5,
+                                  divisions: 10,
+                                  label: _rating.toStringAsFixed(1),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _rating = value;
+                                    });
+                                  },
+                                  activeColor: colorScheme.primary,
+                                  inactiveColor: colorScheme.onSurface
+                                      .withOpacity(0.2),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: TextFormField(
+                              controller: _reviewsController,
+                              decoration: InputDecoration(
+                                labelText: 'Reviews',
+                                hintText: '0 (optional)',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                prefixIcon: const Icon(Icons.reviews),
+                                filled: true,
+                                fillColor: colorScheme.surfaceVariant
+                                    .withOpacity(0.3),
+                              ),
+                              keyboardType: TextInputType.number,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 32),
+
+              // Submit Button
               SizedBox(
                 width: double.infinity,
+                height: 56,
                 child: ElevatedButton(
                   onPressed: _isSubmitting ? null : _submit,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: colorScheme.primary,
+                    foregroundColor: colorScheme.onPrimary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 2,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  ),
                   child: _isSubmitting
-                      ? const CircularProgressIndicator()
-                      : Text(isEdit ? 'Update Product' : 'Add Product'),
+                      ? const SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation(Colors.white),
+                          ),
+                        )
+                      : Text(
+                          isEdit ? 'Update Product' : 'Add Product',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // Help Text
+              Center(
+                child: Text(
+                  'Fields marked with * are required',
+                  style: TextStyle(
+                    color: colorScheme.onSurface.withOpacity(0.6),
+                    fontSize: 12,
+                  ),
                 ),
               ),
             ],

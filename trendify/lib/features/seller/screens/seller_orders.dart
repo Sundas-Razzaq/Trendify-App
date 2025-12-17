@@ -12,19 +12,55 @@ class SellerOrders extends StatelessWidget {
   Widget build(BuildContext context) {
     final sellerId = FirebaseAuth.instance.currentUser?.uid;
 
+    // Debug info
+    debugPrint('Seller Orders - Current Seller ID: $sellerId');
+
     return Scaffold(
       body: StreamBuilder<List<Order>>(
         stream: OrderService().getOrdersForCurrentSeller(sellerId),
         builder: (context, snapshot) {
+          // Debug connection state
+          debugPrint(
+            'Seller Orders - Connection: ${snapshot.connectionState}, HasData: ${snapshot.hasData}, HasError: ${snapshot.hasError}',
+          );
+          if (snapshot.hasData) {
+            debugPrint('Seller Orders - Order count: ${snapshot.data?.length}');
+            snapshot.data?.forEach((order) {
+              debugPrint(
+                'Order: ${order.id}, SellerId: ${order.sellerId}, BuyerId: ${order.buyerId}',
+              );
+            });
+          }
+
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
 
           if (snapshot.hasError) {
             return Center(
-              child: Text(
-                'Error loading orders: ${snapshot.error}',
-                style: Theme.of(context).textTheme.bodyLarge,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.error_outline,
+                      size: 64,
+                      color: Colors.red,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Error loading orders',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      '${snapshot.error}',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               ),
             );
           }
@@ -47,6 +83,14 @@ class SellerOrders extends StatelessWidget {
                     style: Theme.of(
                       context,
                     ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Seller ID: ${sellerId ?? "Not logged in"}',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Colors.grey,
+                      fontFamily: 'monospace',
+                    ),
                   ),
                 ],
               ),

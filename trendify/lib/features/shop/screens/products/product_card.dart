@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:trendify/utils/constants/sizes.dart';
 import 'package:trendify/utils/constants/colors.dart';
 import 'package:trendify/features/shop/models/product.dart';
+import 'package:trendify/routes/app_routes.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
@@ -10,6 +12,7 @@ class ProductCard extends StatelessWidget {
   final VoidCallback? onAddToCart;
   final VoidCallback? onTap;
   final double? width;
+  final bool showBuyNow;
 
   const ProductCard({
     super.key,
@@ -19,6 +22,7 @@ class ProductCard extends StatelessWidget {
     this.onAddToCart,
     this.onTap,
     this.width,
+    this.showBuyNow = true,
   });
 
   @override
@@ -223,12 +227,12 @@ class ProductCard extends StatelessWidget {
                       width: double.infinity,
                       child: ElevatedButton.icon(
                         onPressed: onAddToCart,
-                        icon: const Icon(Icons.add_shopping_cart),
+                        icon: const Icon(Icons.add_shopping_cart, size: 18),
                         label: const Text('Add to Cart'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: TColors.primary,
                           padding: const EdgeInsets.symmetric(
-                            vertical: TSizes.sm,
+                            vertical: TSizes.xs,
                           ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
@@ -238,6 +242,37 @@ class ProductCard extends StatelessWidget {
                         ),
                       ),
                     ),
+
+                    /// BUY NOW
+                    if (showBuyNow) ...[
+                      const SizedBox(height: TSizes.xs),
+                      SizedBox(
+                        width: double.infinity,
+                        child: OutlinedButton.icon(
+                          onPressed: () {
+                            // Direct to checkout with single product
+                            Get.toNamed(
+                              AppRoutes.checkout,
+                              arguments: {'product': product},
+                            );
+                          },
+                          icon: const Icon(Icons.flash_on, size: 18),
+                          label: const Text('Buy Now'),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: TColors.primary,
+                            side: const BorderSide(color: TColors.primary),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: TSizes.xs,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                TSizes.buttonRadius,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ),

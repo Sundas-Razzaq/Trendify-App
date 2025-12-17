@@ -45,7 +45,14 @@ class CheckoutPage extends StatelessWidget {
                   // order per seller by grouping items by `sellerId`.
                   final buyerId = FirebaseAuth.instance.currentUser?.uid;
 
+                  debugPrint('=== CHECKOUT DEBUG ===');
+                  debugPrint('Buyer ID: $buyerId');
+
                   if (product != null) {
+                    debugPrint('Single Product Checkout');
+                    debugPrint('Product: ${product.title}');
+                    debugPrint('Product SellerId: ${product.sellerId}');
+
                     final id = DateTime.now().millisecondsSinceEpoch.toString();
                     final items = <Map<String, dynamic>>[product.toMap()];
                     final total = product.price;
@@ -59,9 +66,14 @@ class CheckoutPage extends StatelessWidget {
                       date: DateTime.now(),
                     );
 
+                    debugPrint(
+                      'Order Created: ID=$id, BuyerId=$buyerId, SellerId=${product.sellerId}',
+                    );
+
                     OrdersStore().addOrder(order);
                     try {
                       await OrderService().addOrder(order);
+                      debugPrint('Order persisted to Firestore successfully');
                     } catch (e) {
                       // Persist failure should not crash UX; log for diagnostics
                       // (keep in-memory order so app behavior remains unchanged)
@@ -89,15 +101,20 @@ class CheckoutPage extends StatelessWidget {
                   }
 
                   // Use cart items
+                  debugPrint('Cart Checkout');
                   final cartItems = CartWishlistStore.instance.cart.value;
+                  debugPrint('Cart Items Count: ${cartItems.length}');
                   if (cartItems.isEmpty) return;
 
                   // Group products by sellerId (null sellerId grouped under '')
                   final Map<String, List<Product>> bySeller = {};
                   for (final p in cartItems) {
                     final key = p.sellerId ?? '';
+                    debugPrint('Product: ${p.title}, SellerId: ${p.sellerId}');
                     bySeller.putIfAbsent(key, () => []).add(p);
                   }
+
+                  debugPrint('Grouped by ${bySeller.length} sellers');
 
                   // Create an order per seller
                   for (final entry in bySeller.entries) {
@@ -112,6 +129,8 @@ class CheckoutPage extends StatelessWidget {
                         DateTime.now().millisecondsSinceEpoch.toString() +
                         (sellerKey ?? '');
 
+                    debugPrint('Creating order for seller: $sellerKey');
+
                     final order = Order(
                       id: id,
                       buyerId: buyerId,
@@ -121,9 +140,14 @@ class CheckoutPage extends StatelessWidget {
                       date: DateTime.now(),
                     );
 
+                    debugPrint(
+                      'Order: ID=$id, BuyerId=$buyerId, SellerId=$sellerKey',
+                    );
+
                     OrdersStore().addOrder(order);
                     try {
                       await OrderService().addOrder(order);
+                      debugPrint('Order persisted to Firestore successfully');
                     } catch (e) {
                       debugPrint('Failed to persist order to Firestore: $e');
                     }
